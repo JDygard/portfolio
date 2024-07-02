@@ -5,8 +5,8 @@ export const minimalistTheme = {
     secondaryColor: "#3a3d48;",
     background: "",
     gridTemplate: `
-      "details details details pic pic pic pic pic portfolio portfolio portfolio"
-      "contacts contacts contacts pic pic pic pic pic skills skills skills"
+      " . details details details pic pic pic pic portfolio portfolio portfolio . "
+      " . contacts contacts contacts pic pic pic pic skills skills skills . "
     `,
 
     personalDetails: {
@@ -23,7 +23,7 @@ export const minimalistTheme = {
         width: "100%",
         height: "auto",
         svgWidth: "100%",
-        svgHeight: "auto",
+        svgHeight: "100%",
         animation: `
           @keyframes draw {
             to {

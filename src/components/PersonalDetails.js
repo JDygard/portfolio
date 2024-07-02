@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { withTheme } from 'styled-components';
+import MinimalistLines from '../decorations/MinimalistLines';
 
 // Step 1: Define the fade-in keyframes animation
 const fadeIn = keyframes`
@@ -14,6 +15,7 @@ const fadeIn = keyframes`
 
 const StyledPortfolio = styled.div`
   grid-area: details;
+  max-width: 300px;
   ul {
     list-style-type: none;
   }
@@ -26,7 +28,7 @@ const StyledPortfolio = styled.div`
     h1 {
       font-size: 3rem;
       opacity: 0; // initially not visible
-      animation: ${fadeIn} 1s forwards 2s; // 2s delay for name
+      animation: ${fadeIn} 1s forwards 3s;
     }
 
     p {
@@ -35,14 +37,14 @@ const StyledPortfolio = styled.div`
       }
 
       &#about {
-        animation: ${fadeIn} 1s forwards; // no delay for about
+        animation: ${fadeIn} 1s forwards 2s;
         margin-bottom: 0;
         font-size: 1.5rem;
         justify-self: start;
       }
 
       &#role {
-        animation: ${fadeIn} 1s forwards 1s; // 1s delay for role
+        animation: ${fadeIn} 1s forwards 2.5s;
         font-size: 1.2rem;
         justify-self: center;
       }
@@ -59,7 +61,7 @@ const StyledPortfolio = styled.div`
 `;
 
 
-function PersonalDetails({ name, role, about, style, theme }) {
+function PersonalDetails({ name, role, about, style, theme, styleType }) {
   return (
     <StyledPortfolio>
       <div id="personalDetailsDiv" style={style}>

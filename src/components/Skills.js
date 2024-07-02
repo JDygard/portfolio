@@ -1,5 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const StyledSkills = styled.div`
   /* default styles */
@@ -9,8 +18,35 @@ const StyledSkills = styled.div`
     padding: 0;
   }
 
-  ${props => props.styleType === 'minimalist' && `
-  
+  ${props => props.styleType === 'minimalist' && css`
+    .skillsList {
+      max-height: 165px;
+      overflow-y: scroll;
+      scrollbar-width: none;
+      overflow: -moz-scrollbars-none; /* For Firefox */
+      -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    }
+
+    .skillsList::-webkit-scrollbar {
+      display: none;
+      width: 0 !important;
+      height: 0;
+      background: transparent; /* For Chrome, Safari, and Opera */
+    }
+    
+
+    .skillsList > li {
+      margin-left: 10px;
+      max-width: 280px;
+    }
+
+    li > span {
+      margin-left: 5px;
+    }
+
+    animation: ${fadeIn} 1s forwards 2.6s !important;
+    opacity: 0; 
+    max-width: 300px;
   `}
 
   ${props => props.styleType === 'groovy' && `
@@ -25,10 +61,9 @@ const StyledSkills = styled.div`
 const ProgressBarContainer = styled.div`
 ${props => props.styleType === 'minimalist' && `
     width: 100%;
-    height: 1px;
-    background-color: #e0e0e0;
+    height: 2px;
+    background-color: #d09d9d;
     border-radius: 8px;
-    border: 1px solid #505564;
     margin: 5px 0;
   `}
 `;
@@ -53,11 +88,12 @@ function Skills({ skillSet, styleType }) {
   return (
     <StyledSkills styleType={styleType}>
       <h3>Skills</h3>
-      <ul>
+      <ul className="skillsList">
         {Object.entries(skillSet).map(([skill, level], index) => (
           <li key={index}>
-            {skill}: {level}%
-            <ProgressBar width={level} styleType={styleType} />
+            <span>
+              {skill}<ProgressBar width={level} styleType={styleType} />
+            </span>
           </li>
         ))}
       </ul>

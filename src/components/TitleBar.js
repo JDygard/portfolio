@@ -45,7 +45,6 @@ function TitleBar({ styles, styleType, onSelect }) {
         ))}
       </Bar>
       <Hamburger>
-        // Your hamburger icon here
       </Hamburger>
     </>
   );

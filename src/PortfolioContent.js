@@ -1,15 +1,14 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 // Components
 import TitleBar from './components/TitleBar';
-import StyleSelector from './StyleSelector';
 import ProfilePicture from './components/ProfilePicture';
 import PersonalDetails from './components/PersonalDetails';
 import PortfolioItems from './components/PortfolioItems';
 import ContactLinks from './components/ContactLinks';
 import Skills from './components/Skills';
 // Content
-import { skillsCommon, minimalistContent, groovyContent, artsyContent } from './helpers/content';
+import { skillsCommon, commonPortfolioItems, minimalistContent, groovyContent, artsyContent } from './helpers/content';
 import { GlobalStyles } from './GlobalStyles';
 import { styleTypes } from './styleTypes';
 import { ThemeProvider } from 'styled-components';
@@ -26,7 +25,15 @@ color: ${props => props.theme.secondaryColor};
 background-image: ${props => props.theme.background};
 font-family: ${props => props.theme.primaryFont};
 grid-template-areas: ${props => props.theme.gridTemplate};
+figure {
+  margin-right: 15px;
+}
 
+figcaption {
+  font-size: 0.8rem;  /* Adjust as needed */
+  color: #888;       /* Adjust as needed */
+  text-align: center;
+}
 .profilePicture {
   height: ${props => props.theme.profilePicture.height};
   width: ${props => props.theme.profilePicture.width};
@@ -42,15 +49,16 @@ function PortfolioContent({ styleType, onSelectStyle }) {
       selectedTheme = minimalistTheme;
       profileContent = minimalistContent;
       break;
-    case "groovy":
+    case "professional":
       selectedTheme = groovyTheme;
       profileContent = groovyContent;
       break;
-    case "artsy":
+    case "technical":
       selectedTheme = artsyTheme;
       profileContent = artsyContent;
       break;
     default:
+      console.error("DEFAULT style type selected");
       profileContent = minimalistContent;
   }
 
@@ -71,9 +79,9 @@ function PortfolioContent({ styleType, onSelectStyle }) {
 
           <Skills skillSet={skillsCommon} styleType={styleType} />
 
-          <PortfolioItems items={profileContent.portfolioItems} styleType={styleType} />
-
           <ContactLinks links={profileContent.contactLinks} styleType={styleType} />
+
+          <PortfolioItems items={profileContent.portfolioItems} commonPortfolioItems={commonPortfolioItems} styleType={styleType} />
         </Content>
       </div>
     </ThemeProvider>

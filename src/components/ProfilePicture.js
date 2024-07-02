@@ -6,14 +6,18 @@ const ImageContainer = styled.div`
   height: ${props => props.theme.profilePicture.height};
 
   ${props => props.theme.name === "minimalist" && css`
+  overflow: visible;
     @keyframes draw {
       to {
         stroke-dashoffset: 0;
       }
     }
-
+    display:block;
+    
     .face_svg__cls-1 {
       animation: draw 4s forwards;
+      transform: scale(1.2);
+      transform-origin: top;
     }
     
     .face_svg__cls-1:nth-child(1) {
@@ -36,9 +40,9 @@ const ImageContainer = styled.div`
 `;
 
 
-function ProfilePicture({ SvgComponent, style }) {
+function ProfilePicture({ SvgComponent, style, styleType }) {
   return (
-    <ImageContainer>
+    <ImageContainer styleType={styleType} >
       <div style={style} id="profilePicture">
         <SvgComponent alt="Developer's Profile" />
       </div>
