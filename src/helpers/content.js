@@ -19,16 +19,67 @@ export const commonPortfolioItems = [{
   name: "EVO",
   Content: () => (
     <div>
+      <img src="https://github.com/JDygard/EVO/raw/main/assets/images/readme/menu-screen.png" alt="EVO" style={{ width: "100%", height: "auto" }} />
+      <img src="https://github.com/JDygard/EVO/raw/main/assets/images/readme/gameplay-screen.png" alt="EVO" style={{ width: "100%", height: "auto" }} />
+      <h2>Overview</h2>
+      <p><strong>Evo</strong> is an evolution-themed game where players advance through stages by eating food and defeating competitors. The goal is to reach round 4 and evolve the 'size' upgrade. Created by Joel Dygard using Phaser 3 and JavaScript.</p>
 
+      <h2>Process</h2>
+      <p>The development process began with establishing the game's structure, followed by iterative improvements and feature additions. The game was built with a focus on creating a challenging yet enjoyable experience, incorporating feedback mechanisms and visual rewards.</p>
+
+      <h2>Key Features</h2>
+      <ul>
+        <li>Player Movement: Smooth controls and responsive physics.</li>
+        <li>Scrolling Scene: Dynamic camera following the player.</li>
+        <li>Collectible Food: Items to gather for evolution points.</li>
+        <li>Enemy AI: Competitors with unique behaviors.</li>
+        <li>Upgrades: Various evolution paths for player customization.</li>
+        <li>Rounds System: Arcade-style progression through levels.</li>
+      </ul>
+
+      <h2>Technologies Used</h2>
+      <ul>
+        <li>Phaser 3: Game development framework.</li>
+        <li>JavaScript: Core programming language.</li>
+        <li>GIMP: Graphics and animation creation.</li>
+        <li>HTML5 & CSS: Structuring and styling the game interface.</li>
+        <li>GitHub Pages: Deployment platform.</li>
+      </ul>
+
+      <h2>Fun Factor</h2>
+      <p>Evo is designed to be both challenging and fun. Players can explore different evolution strategies, enjoy smooth animations, and experience a rewarding gameplay loop. The game includes various upgrades and rounds to keep the gameplay engaging and dynamic.</p>
+
+      <h2>Play and Explore</h2>
+      <p>Experience Evo by playing it directly in your browser. Dive into the evolutionary journey and see how far you can evolve!</p>
+
+      <div style={{ display: "block", marginBottom: "10px" }}>
+        <a href="https://jdygard.github.io/EVO/">Play the game</a>
+      </div>
+      <div>
+        <a href="https://github.com/JDygard/EVO">View the code/readme</a>
+      </div>
     </div>
   )
 },
 {
-  name: "Bark Farmers",
+  name: "CTP",
   Content: () => (
-    <div>
-      <img src="/path/to/image-for-bark-farmers.jpg" alt="Bark Farmers Project" />
-      <p>Details about the Bark Farmers project...</p>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <p> Note: Due to a non-disclosure agreement, I am unable to share details or images specific to the platform. </p>
+      <h1>Combine Technology Platform</h1>
+      <h3>Summary</h3>
+      <p> My work on the CTP is a full-stack, generalized HMI dashboard for quickly producing bespoke data science, machine learning and LLM solutions to customers.</p>
+      <p> Having a generalized dashboard interface for the platform was my idea and responsibility. I produced design documents and concepts that lead to multiple funded prototypes and sales.</p>
+      <p> For each customer, we were able to build more generalized components and capabilities, accelerating prototyping and finished products for future iterations.</p>
+      <h3>Technologies Used</h3>
+      <ul>
+        <li>React/Redux: Central framework of the application</li>
+        <li>Websockets</li>
+        <li>Node.js/Express: Backend server</li>
+        <li>Adobe Illustrator/Photoshop: Producing visual elements</li>
+        <li>D3.js: Bespoke charts and data visualizations</li>
+        <li>Figma: Producing design documents</li>
+      </ul>
     </div>
   )
 },
@@ -61,9 +112,9 @@ export const commonPortfolioItems = [{
         <ul style={{ flexShrink: 0, width: "50%", marginRight: '10px' }}>
           <li>I spearheaded a text-size adjustment functionality that provides responsive accessibility for visually impaired users, which included the refactoring of multiple visual components to accommodate the variable text. Shown below is standard vs. extra-large texts.</li>
         </ul>
-        <figure style={{ flexShrink: 0, width: "25%", marginRight: "10px"}}>
+        <figure style={{ flexShrink: 0, width: "25%", marginRight: "10px" }}>
           <img src={resize} style={{ height: "auto" }} alt="Accessibility" />
-          <figcaption style={{ justifySelf: "center"}}>Tank configuration graphic in normal (top) and xlarge (bottom) text sizes.</figcaption>
+          <figcaption style={{ justifySelf: "center" }}>Tank configuration graphic in normal (top) and xlarge (bottom) text sizes.</figcaption>
         </figure>
 
       </div>
@@ -81,7 +132,7 @@ export const commonPortfolioItems = [{
 },
 {
   name: "Redemptor Project",
-  link: "https://example.com",
+  link: "",
   Content: () => (
     <div>
       <h1>Special System “Redemptor”</h1>
@@ -132,7 +183,7 @@ export const minimalistContent = {
   skills: commonSkills
 };
 
-export const groovyContent = {
+export const professionalContent = {
   SvgComponent: SvgFace,
   personalDetails: {
     name: "Joel Dygard",
@@ -144,7 +195,7 @@ export const groovyContent = {
   skills: commonSkills
 };
 
-export const artsyContent = {
+export const technicalContent = {
   SvgComponent: SvgFace,
   personalDetails: {
     name: "Joel Dygard",

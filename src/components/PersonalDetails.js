@@ -1,69 +1,82 @@
 import React from 'react';
-import styled, { css, keyframes } from 'styled-components';
-import { withTheme } from 'styled-components';
-import MinimalistLines from '../decorations/MinimalistLines';
+import styled from 'styled-components';
+import { defaultTheme } from '../styleTypes';
 
-// Step 1: Define the fade-in keyframes animation
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+const getTheme = (props) => props.theme?.personalDetails ? props.theme : defaultTheme;
 
-const StyledPortfolio = styled.div`
+const StyledPortfolio = styled.section`
   grid-area: details;
-  max-width: 300px;
-  ul {
-    list-style-type: none;
+  justify-self: ${props => getTheme(props).personalDetails.justifySelf};
+  align-self: ${props => getTheme(props).personalDetails.alignSelf};
+  width: 100%;
+  max-width: ${props => getTheme(props).personalDetails.maxWidth};
+  padding: ${props => getTheme(props).personalDetails.padding};
+  background: ${props => getTheme(props).personalDetails.background};
+  border: ${props => getTheme(props).personalDetails.border};
+  border-radius: ${props => getTheme(props).personalDetails.borderRadius};
+  box-shadow: ${props => getTheme(props).personalDetails.boxShadow || 'none'};
+  color: ${props => getTheme(props).secondaryColor};
+  transition: background-color 0.45s ease, border-color 0.45s ease, border-radius 0.45s ease, box-shadow 0.45s ease, color 0.45s ease;
+
+  #personalDetailsDiv {
+    display: ${props => getTheme(props).personalDetails.display};
+    flex-direction: ${props => getTheme(props).personalDetails.flexDirection || 'column'};
+    gap: ${props => getTheme(props).personalDetails.gap};
+    text-align: ${props => getTheme(props).personalDetails.textAlign};
   }
 
-  ${props => props.theme.name === "minimalist" && css`
+  h1,
+  p {
+    transition: color 0.45s ease, font-size 0.45s ease, font-weight 0.45s ease;
+  }
+
+  h1 {
+    order: ${props => getTheme(props).personalDetails.nameOrder};
+    margin: 0;
+    font-size: ${props => getTheme(props).personalDetails.nameSize};
+    font-weight: ${props => getTheme(props).personalDetails.nameWeight};
+    line-height: 0.94;
+  }
+
+  #about {
+    order: ${props => getTheme(props).personalDetails.aboutOrder};
+    margin: 0;
+    color: ${props => getTheme(props).secondaryColor};
+    font-size: ${props => getTheme(props).personalDetails.aboutSize};
+    font-weight: ${props => getTheme(props).personalDetails.aboutWeight};
+    line-height: 1.4;
+  }
+
+  #role {
+    order: ${props => getTheme(props).personalDetails.roleOrder};
+    margin: 0;
+    color: ${props => getTheme(props).accentColor};
+    font-size: ${props => getTheme(props).personalDetails.roleSize};
+    font-weight: ${props => getTheme(props).personalDetails.roleWeight};
+    line-height: 1.4;
+    text-transform: ${props => getTheme(props).name === 'minimalist' ? 'none' : 'uppercase'};
+  }
+
+  @media (max-width: 768px) {
+    position: ${props => getTheme(props).mobilePersonalDetails.position};
+    z-index: ${props => getTheme(props).mobilePersonalDetails.zIndex};
+    top: ${props => getTheme(props).mobilePersonalDetails.top};
+    max-width: 100%;
+
     #personalDetailsDiv {
-      display: grid;
+      text-align: left;
     }
 
     h1 {
-      font-size: 3rem;
-      opacity: 0; // initially not visible
-      animation: ${fadeIn} 1s forwards 3s;
+      font-size: 2.45rem;
+      line-height: 1;
     }
-
-    p {
-      & {
-        opacity: 0; // initially not visible
-      }
-
-      &#about {
-        animation: ${fadeIn} 1s forwards 2s;
-        margin-bottom: 0;
-        font-size: 1.5rem;
-        justify-self: start;
-      }
-
-      &#role {
-        animation: ${fadeIn} 1s forwards 2.5s;
-        font-size: 1.2rem;
-        justify-self: center;
-      }
-    }
-
-    div > h1 {
-      text-align: ${props => props.theme.personalDetails.textAlign || 'left'};
-    }
-
-    justify-self: ${props => props.theme.personalDetails.justifyContent || 'start'};
-    display: flex;
-    flex-direction: ${props => props.theme.personalDetails.flexDirection || 'column'};
-  `};
+  }
 `;
 
-
-function PersonalDetails({ name, role, about, style, theme, styleType }) {
+function PersonalDetails({ name, role, about, style }) {
   return (
-    <StyledPortfolio>
+    <StyledPortfolio data-tween-id="details" aria-labelledby="name">
       <div id="personalDetailsDiv" style={style}>
         <p id="about">{about}</p>
         <p id="role">{role}</p>
@@ -73,4 +86,4 @@ function PersonalDetails({ name, role, about, style, theme, styleType }) {
   );
 }
 
-export default withTheme(PersonalDetails);
+export default PersonalDetails;

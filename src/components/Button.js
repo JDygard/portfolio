@@ -1,45 +1,57 @@
 import styled from 'styled-components';
+import { defaultTheme } from '../styleTypes';
 
-const StyledButton = styled.a`
-  display: inline-block;
+const getTheme = (props) => props.theme?.button ? props.theme : defaultTheme;
+
+const StyledButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-height: 34px;
   text-decoration: none;
-  transition: background-color 0.3s, color 0.3s;
+  background: ${props => getTheme(props).button.background};
+  color: ${props => getTheme(props).button.color};
+  border: ${props => getTheme(props).button.border};
+  border-left: ${props => getTheme(props).button.borderLeft};
+  border-right: ${props => getTheme(props).button.borderRight};
+  border-radius: ${props => getTheme(props).button.borderRadius};
+  padding: ${props => getTheme(props).button.padding};
+  margin: ${props => getTheme(props).button.margin};
+  font-weight: ${props => getTheme(props).button.fontWeight};
+  text-transform: ${props => getTheme(props).button.textTransform};
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 
-  /* Default Styles */
-  background-color: #ddd;
-  color: black;
+  &:hover {
+    background: ${props => getTheme(props).button.hoverBackground};
+    color: ${props => getTheme(props).button.hoverColor};
+  }
 
-  ${props => props.styleType === 'minimalist' && `
-    background-color: #ececec;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-    justify-content: center;
-    width:auto;
-    color: black;
-    padding: 5px 16px;
-    margin: 5px;
-    border-radius: 5px;
-    &:hover {
-      opacity: 0.8;
-      background-color: white;
-      pointer: pointer;
-    }
-  `}
+  &:active {
+    transform: translateY(1px);
+  }
 
-  ${props => props.styleType === 'groovy' && `
-    background-color: purple;
-    color: gold;
-  `}
-
-  ${props => props.styleType === 'artsy' && `
-    background-color: pink;
-    color: navy;
-  `}
-
+  &:focus-visible {
+    outline: 2px solid ${props => getTheme(props).accentColor};
+    outline-offset: 2px;
+  }
 `;
 
-function Button({ href, children, style, styleType }) {
-  return <StyledButton href={href} style={style} styleType={styleType}>{children}</StyledButton>;
+function Button({ href, children, style, ...props }) {
+  const as = href ? 'a' : 'button';
+
+  return (
+    <StyledButton
+      as={as}
+      href={href}
+      style={style}
+      type={href ? undefined : 'button'}
+      {...props}
+    >
+      {children}
+    </StyledButton>
+  );
 }
 
 export default Button;

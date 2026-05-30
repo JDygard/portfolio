@@ -1,99 +1,104 @@
 import React from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
+import { defaultTheme } from '../styleTypes';
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+const getTheme = (props) => props.theme?.skills ? props.theme : defaultTheme;
 
-const StyledSkills = styled.div`
-  /* default styles */
+const StyledSkills = styled.section`
   grid-area: skills;
-  ul {
-    list-style-type: none;
-    padding: 0;
+  justify-self: ${props => getTheme(props).skills.justifySelf};
+  align-self: ${props => getTheme(props).skills.alignSelf};
+  width: 100%;
+  max-width: ${props => getTheme(props).skills.maxWidth};
+  padding: ${props => getTheme(props).section.padding};
+  background: ${props => getTheme(props).section.background};
+  border: ${props => getTheme(props).section.border};
+  border-radius: ${props => getTheme(props).section.borderRadius};
+  box-shadow: ${props => getTheme(props).section.boxShadow};
+  text-align: ${props => getTheme(props).skills.textAlign};
+  transition: background-color 0.45s ease, border-color 0.45s ease, border-radius 0.45s ease, box-shadow 0.45s ease, color 0.45s ease;
+
+  h3 {
+    margin: 0 0 14px;
+    color: ${props => getTheme(props).accentColor};
+    font-size: ${props => getTheme(props).skills.headingSize};
+    font-weight: ${props => getTheme(props).skills.headingWeight};
+    text-transform: ${props => getTheme(props).skills.headingTransform};
   }
 
-  ${props => props.styleType === 'minimalist' && css`
-    .skillsList {
-      max-height: 165px;
-      overflow-y: scroll;
-      scrollbar-width: none;
-      overflow: -moz-scrollbars-none; /* For Firefox */
-      -ms-overflow-style: none; /* For Internet Explorer and Edge */
-    }
+  ul {
+    display: grid;
+    gap: ${props => getTheme(props).skills.itemGap};
+    max-height: ${props => getTheme(props).skills.listMaxHeight};
+    margin: 0;
+    padding: 0;
+    overflow-y: ${props => getTheme(props).skills.overflowY};
+    list-style: none;
+    scrollbar-width: none;
+  }
 
-    .skillsList::-webkit-scrollbar {
-      display: none;
-      width: 0 !important;
-      height: 0;
-      background: transparent; /* For Chrome, Safari, and Opera */
-    }
-    
+  ul::-webkit-scrollbar {
+    display: none;
+  }
 
-    .skillsList > li {
-      margin-left: 10px;
-      max-width: 280px;
-    }
+  li {
+    min-width: 0;
+  }
 
-    li > span {
-      margin-left: 5px;
-    }
+  .skillLabel {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: ${props => getTheme(props).secondaryColor};
+    font-size: 0.9rem;
+  }
 
-    animation: ${fadeIn} 1s forwards 2.6s !important;
-    opacity: 0; 
-    max-width: 300px;
-  `}
+  .skillLevel {
+    color: ${props => getTheme(props).mutedColor};
+  }
 
-  ${props => props.styleType === 'groovy' && `
-    /* groovy specific styles */
-  `}
-
-  ${props => props.styleType === 'artsy' && `
-    /* artsy specific styles */
-  `}
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
 `;
 
 const ProgressBarContainer = styled.div`
-${props => props.styleType === 'minimalist' && `
-    width: 100%;
-    height: 2px;
-    background-color: #d09d9d;
-    border-radius: 8px;
-    margin: 5px 0;
-  `}
+  width: 100%;
+  height: ${props => getTheme(props).skills.progressHeight};
+  margin-top: 5px;
+  overflow: hidden;
+  background: ${props => getTheme(props).skills.progressBackground};
+  border-radius: 999px;
 `;
 
 const ProgressBarFiller = styled.div`
-  width: ${props => props.width}%;
+  width: ${props => props.$width}%;
   height: 100%;
-  background-color: black;
+  background: ${props => getTheme(props).skills.progressFill};
   border-radius: inherit;
-  transition: width 0.2s ease-in;
+  transition: width 0.3s ease-in;
 `;
 
-function ProgressBar({ width, styleType }) {
+function ProgressBar({ width }) {
   return (
-    <ProgressBarContainer styleType={styleType}>
-      <ProgressBarFiller width={width} />
+    <ProgressBarContainer>
+      <ProgressBarFiller $width={width} />
     </ProgressBarContainer>
   );
 }
 
-function Skills({ skillSet, styleType }) {
+function Skills({ skillSet }) {
   return (
-    <StyledSkills styleType={styleType}>
-      <h3>Skills</h3>
-      <ul className="skillsList">
-        {Object.entries(skillSet).map(([skill, level], index) => (
-          <li key={index}>
-            <span>
-              {skill}<ProgressBar width={level} styleType={styleType} />
+    <StyledSkills data-tween-id="skills" aria-labelledby="skills-heading">
+      <h3 id="skills-heading">Skills</h3>
+      <ul>
+        {Object.entries(skillSet).map(([skill, level]) => (
+          <li key={skill}>
+            <span className="skillLabel">
+              <span>{skill}</span>
+              <span className="skillLevel">{level}</span>
             </span>
+            <ProgressBar width={level} />
           </li>
         ))}
       </ul>
