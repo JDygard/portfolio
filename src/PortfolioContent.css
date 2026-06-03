@@ -1,0 +1,55 @@
+.content {
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 30px;
+  row-gap: 26px;
+  align-items: center;
+  margin: 0 auto;
+  padding: 56px 56px 56px;
+  background-color: #fbf8f2;
+  color: #30333c;
+  font-family: Montserrat, Arial, sans-serif;
+  grid-template-areas:
+    "details details details details pic pic pic pic portfolio portfolio portfolio portfolio"
+    "contacts contacts contacts contacts pic pic pic pic skills skills skills skills";
+  position: relative;
+  overflow: visible;
+}
+
+.content figure {
+  margin-right: 15px;
+}
+
+.content figcaption {
+  font-size: 0.8rem;
+  color: #77716c;
+  text-align: center;
+}
+
+.content a {
+  color: inherit;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content p {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "pic"
+      "details"
+      "skills"
+      "portfolio"
+      "contacts";
+    padding: 32px 18px 32px;
+    min-height: auto;
+    gap: 18px;
+  }
+}

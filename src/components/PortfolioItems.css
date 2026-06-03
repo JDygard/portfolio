@@ -1,0 +1,127 @@
+@keyframes portfolioFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio {
+  grid-area: portfolio;
+  justify-self: start;
+  align-self: end;
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  max-width: 320px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: left;
+  transition: background-color 0.45s ease, border-color 0.45s ease, border-radius 0.45s ease, box-shadow 0.45s ease, color 0.45s ease;
+}
+
+.portfolio h3 {
+  margin: 0 0 12px;
+  color: #ba6f6f;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.portfolio ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portfolio li {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .portfolio {
+    max-width: 100%;
+  }
+}
+
+.modal {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(12, 14, 18, 0.64);
+  opacity: 0;
+  animation: portfolioFadeIn 0.22s ease forwards;
+}
+
+.modalContent {
+  position: relative;
+  width: min(920px, calc(100vw - 32px));
+  height: min(82vh, 820px);
+  padding: 32px;
+  overflow: auto;
+  background: #fbf8f2;
+  color: #1d2028;
+  border: 1px solid #111318;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+}
+
+.modalContent h1,
+.modalContent h2,
+.modalContent h3 {
+  color: #ba6f6f;
+}
+
+.modalContent img {
+  max-width: 100%;
+  height: auto;
+}
+
+.modalContent figure {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 22px;
+  }
+}
+
+.closeButton {
+  position: sticky;
+  top: 0;
+  float: right;
+  min-width: 36px;
+  min-height: 36px;
+  margin: -18px -18px 10px 12px;
+  border: 0 solid transparent;
+  border-radius: 5px;
+  background: #ececec;
+  color: #111318;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.closeButton:hover {
+  background: #ffffff;
+  color: #111318;
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid #ba6f6f;
+  outline-offset: 2px;
+}

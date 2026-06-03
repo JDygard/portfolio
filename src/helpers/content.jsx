@@ -5,13 +5,16 @@ import resize from '../assets/Poseidon/resize.png'
 
 export const skillsCommon = {
   "React": 100,
-  "HTML/CSS": 100,
-  "UX design": 90,
-  "Adobe Illustrator": 85,
-  "TypeScript": 80,
-  "Node.JS": 70,
-  "Python/Django": 50,
-  "C#/ASP.net": 40,
+  "TypeScript": 95,
+  "State Management": 95,
+  "Frontend Architecture": 90,
+  "UX/UI Design": 90,
+  "AI-Assisted Dev": 90,
+  "Adobe Creative Suite": 90,
+  "Maps / GIS": 85,
+  "Data Visualization": 80,
+  "Node.js": 80,
+  "Vue": 35,
 };
 
 // These contain a "content" key that is a JSX function and can be returned in the modal directly. 
