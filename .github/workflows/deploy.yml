@@ -43,6 +43,34 @@ jobs:
       - name: Build (client + SSR + prerender)
         run: npm run build
 
+      - name: Verify prerendered CSS
+        run: |
+          set -euo pipefail
+
+          css_hrefs="$(grep -oE 'href="/assets/[^"]+\.css"' dist/index.html | sed -E 's/^href="//; s/"$//')"
+          if [[ -z "${css_hrefs}" ]]; then
+            echo "dist/index.html does not link a bundled CSS asset." >&2
+            exit 1
+          fi
+
+          found_content_rules=false
+          while IFS= read -r css_href; do
+            css_file="dist${css_href}"
+            if [[ ! -f "${css_file}" ]]; then
+              echo "dist/index.html links a missing CSS asset: ${css_file}" >&2
+              exit 1
+            fi
+
+            if grep -q '\.content' "${css_file}"; then
+              found_content_rules=true
+            fi
+          done <<< "${css_hrefs}"
+
+          if [[ "${found_content_rules}" != "true" ]]; then
+            echo "Bundled CSS is missing the .content layout rules." >&2
+            exit 1
+          fi
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
