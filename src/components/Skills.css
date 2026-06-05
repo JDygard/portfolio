@@ -70,7 +70,7 @@
   transition: width 0.3s ease-in;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .skills {
     max-width: 100%;
   }

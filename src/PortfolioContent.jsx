@@ -4,9 +4,10 @@ import ProfilePicture from './components/ProfilePicture';
 import PersonalDetails from './components/PersonalDetails';
 import PortfolioItems from './components/PortfolioItems';
 import ContactLinks from './components/ContactLinks';
-import Skills from './components/Skills';
+import Timeline from './components/Timeline';
 // Content
-import { skillsCommon, minimalistContent } from './helpers/content';
+import { minimalistContent } from './helpers/content';
+import timelineData from './data/timeline.json';
 import './PortfolioContent.css';
 
 function PortfolioContent() {
@@ -18,7 +19,7 @@ function PortfolioContent() {
         role={minimalistContent.personalDetails.role}
         about={minimalistContent.personalDetails.about}
       />
-      <Skills skillSet={skillsCommon} />
+      <Timeline data={timelineData} />
       <ContactLinks links={minimalistContent.contactLinks} />
       <PortfolioItems items={minimalistContent.portfolioItems} />
     </main>

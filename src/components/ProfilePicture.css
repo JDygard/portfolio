@@ -73,7 +73,7 @@
   animation-delay: 1.2s;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .imageContainer {
     width: min(78vw, 360px);
     height: auto;

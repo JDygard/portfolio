@@ -48,7 +48,7 @@
   display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .portfolio {
     max-width: 100%;
   }
@@ -95,7 +95,7 @@
   max-width: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .modalContent {
     padding: 22px;
   }

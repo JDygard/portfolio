@@ -16,6 +16,8 @@
   box-shadow: none;
   color: #30333c;
   transition: background-color 0.45s ease, border-color 0.45s ease, border-radius 0.45s ease, box-shadow 0.45s ease, color 0.45s ease;
+  position: absolute;
+  bottom: 0;
 }
 
 .details #personalDetailsDiv {
@@ -63,7 +65,7 @@
   animation: fadeInOpacity 1s forwards 2.5s;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .details {
     position: relative;
     z-index: 2;

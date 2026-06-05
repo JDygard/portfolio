@@ -1,0 +1,343 @@
+{
+  "title": "Career & Projects",
+  "subtitle": "Helicopters to hypertext — a non-linear path into software.",
+  "categories": {
+    "employment": { "label": "Employment", "color": "#3f7cc0", "lane": "left" },
+    "education":  { "label": "Education",  "color": "#ba6f6f", "lane": "mid" },
+    "project":    { "label": "Side Projects", "color": "#d59320", "lane": "right" }
+  },
+  "items": [
+    {
+      "id": "army",
+      "category": "employment",
+      "title": "U.S. Army",
+      "role": "15U Chinook Helicopter Mechanic",
+      "location": "United States",
+      "start": 2003,
+      "end": 2005,
+      "summary": "Maintained and repaired CH-47 Chinook airframes and powerplants. Where the habit of methodically debugging complex systems under pressure started.",
+      "links": []
+    },
+    {
+      "id": "interim",
+      "category": "employment",
+      "title": "Independent / Odd Jobs",
+      "role": "Sales & manual labor",
+      "start": 2005,
+      "end": 2008,
+      "summary": "The 'selling my back' era — a stretch of sales and physical work between chapters while figuring out the next move.",
+      "links": []
+    },
+    {
+      "id": "stonescapes",
+      "category": "employment",
+      "title": "Stonescapes by Design",
+      "role": "Site Manager / Laborer",
+      "start": 2008,
+      "end": 2012,
+      "summary": "Ran job sites and crews building bespoke stonework — scheduling, logistics, and hands-on construction.",
+      "links": []
+    },
+    {
+      "id": "aim",
+      "category": "education",
+      "title": "Aviation Institute of Maintenance",
+      "role": "Airframe & Powerplant program",
+      "start": 2010,
+      "end": 2013,
+      "summary": "Formal A&P training. Overlapped the Stonescapes years — working days, studying toward certification.",
+      "links": []
+    },
+    {
+      "id": "sfi",
+      "category": "education",
+      "title": "Svenska För Invandrare (SFI)",
+      "role": "Swedish language studies",
+      "location": "Sweden",
+      "start": 2013,
+      "end": 2014,
+      "summary": "Relocated to Sweden and learned the language from the ground up.",
+      "links": []
+    },
+    {
+      "id": "goteborg",
+      "category": "employment",
+      "title": "Göteborgs Spårvägar",
+      "role": "M32 Tram Mechanic",
+      "location": "Gothenburg, Sweden",
+      "start": 2014,
+      "end": 2021,
+      "summary": "Maintained Gothenburg's M32 tram fleet — diagnostics, electrical and mechanical repair on rolling stock.",
+      "links": []
+    },
+    {
+      "id": "code-institute",
+      "category": "education",
+      "title": "Code Institute",
+      "role": "Full-Stack Software Development Diploma",
+      "location": "Dublin (remote)",
+      "start": 2021,
+      "end": 2023,
+      "summary": "Accredited full-stack diploma — the deliberate pivot from wrenches to web. HTML/CSS/JS through Python, Django and React.",
+      "links": []
+    },
+    {
+      "id": "combine",
+      "category": "employment",
+      "title": "Combine Control Systems",
+      "role": "Frontend Engineer",
+      "location": "Sweden",
+      "start": 2023,
+      "end": null,
+      "summary": "Frontend engineer building data-science, ML and LLM tooling. Owner of the generalized dashboard UX across customer engagements.",
+      "links": [
+        { "label": "LinkedIn", "url": "https://www.linkedin.com/in/joel-dygard/" }
+      ]
+    },
+
+    {
+      "id": "ctp",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Combine Technology Platform",
+      "role": "Combine work project",
+      "importance": 5,
+      "start": 2023,
+      "end": null,
+      "summary": "A multipurpose data dashboard for use with Accelerator data science projects.",
+      "links": []
+    },
+    {
+      "id": "operator-hmi",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Operator HMI",
+      "role": "Combine work project",
+      "importance": 5,
+      "start": 2023,
+      "end": null,
+      "summary": "Operator-facing HMI project for field workflows. Details are covered by an NDA.",
+      "links": []
+    },
+    {
+      "id": "admin-dashboard",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Admin Dashboard",
+      "role": "Combine work project",
+      "importance": 5,
+      "start": 2023,
+      "end": null,
+      "summary": "Administrative dashboard for configuring and managing operator-facing workflows.",
+      "links": []
+    },
+    {
+      "id": "municipal-water-management",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Municipal Water Management Dashboard",
+      "role": "Combine work project",
+      "importance": 4,
+      "start": 2023,
+      "end": 2024,
+      "summary": "Dashboard for municipal water management, focused on operational visibility and decision support.",
+      "links": []
+    },
+
+    {
+      "id": "belltini",
+      "category": "project",
+      "parentId": "code-institute",
+      "title": "Belltini",
+      "role": "HTML & CSS milestone",
+      "importance": 3,
+      "start": 2021,
+      "startMonth": 4,
+      "end": 2021,
+      "summary": "First Code Institute project: a fresh pasta website, live on GitHub Pages and built with HTML and CSS only.",
+      "links": [
+        { "label": "Live", "url": "https://jdygard.github.io/belltini/index.html" },
+        { "label": "Code", "url": "https://github.com/JDygard/belltini" }
+      ]
+    },
+    {
+      "id": "dominant-chaos",
+      "category": "project",
+      "parentId": "code-institute",
+      "title": "Dominant Chaos",
+      "role": "Code Institute milestone",
+      "importance": 3,
+      "start": 2021,
+      "startMonth": 9,
+      "endMonth": 11,
+      "end": 2021,
+      "summary": "Third Code Institute milestone project. Not currently live; linked to the repository.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/dominant_chaos" }
+      ]
+    },
+    {
+      "id": "flask-task-manager",
+      "category": "project",
+      "side": true,
+      "title": "Flask Task Manager",
+      "role": "Flask learning project",
+      "importance": 2,
+      "start": 2021,
+      "startMonth": 6,
+      "end": 2021,
+      "summary": "Side project for learning Flask. Not currently live; linked to the repository.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/flask-task-manager" }
+      ]
+    },
+    {
+      "id": "bark-farmers",
+      "category": "project",
+      "parentId": "code-institute",
+      "title": "Bark Farmers",
+      "role": "Code Institute milestone",
+      "importance": 3,
+      "start": 2022,
+      "startMonth": 1,
+      "endMonth": 2,
+      "end": 2022,
+      "summary": "Fourth Code Institute milestone project. Not currently live; linked to the repository.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/BarkFarmers" }
+      ]
+    },
+    {
+      "id": "tinibell",
+      "category": "project",
+      "side": true,
+      "title": "Tinibell",
+      "role": "Local business website",
+      "importance": 5,
+      "start": 2022,
+      "startMonth": 3,
+      "end": 2022,
+      "summary": "Website project for Tinibell Pasta, a local business in my area. The site is not currently live.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/tinibell" }
+      ]
+    },
+    {
+      "id": "react-lights-out",
+      "category": "project",
+      "side": true,
+      "title": "React Lights Out",
+      "role": "React game",
+      "importance": 3,
+      "start": 2022,
+      "startMonth": 4,
+      "end": 2022,
+      "summary": "React implementation of the Lights Out puzzle game.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/react-lights-out" }
+      ]
+    },
+    {
+      "id": "bubblepopper",
+      "category": "project",
+      "side": true,
+      "title": "Bubblepopper",
+      "role": "Full-stack React project",
+      "importance": 3,
+      "start": 2022,
+      "startMonth": 6,
+      "end": 2022,
+      "summary": "Full-stack React project from the Code Institute years.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/bubblepopper" }
+      ]
+    },
+    {
+      "id": "how-is-earth",
+      "category": "project",
+      "side": true,
+      "title": "How Is Earth",
+      "role": "Full-stack React project",
+      "importance": 5,
+      "start": 2022,
+      "startMonth": 6,
+      "end": 2022,
+      "summary": "Full-stack React project, marked as one to get live.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/howisearth" }
+      ]
+    },
+    {
+      "id": "frost-air-kinetic-energy",
+      "category": "project",
+      "side": true,
+      "title": "Frost Air and Kinetic Energy",
+      "role": "Weekend React pitch",
+      "importance": 4,
+      "start": 2023,
+      "startMonth": 3,
+      "end": 2023,
+      "summary": "React project for a fake machine company, built over a weekend as a wild bid to get a job at a company. It worked.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/Frost-Air-and-Kinetic-Energy" }
+      ]
+    },
+    {
+      "id": "football-stories",
+      "category": "project",
+      "side": true,
+      "title": "Football Stories",
+      "role": "Football analysis project",
+      "importance": 4,
+      "start": 2024,
+      "end": 2024,
+      "summary": "Football draft analysis and storytelling project.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/draftAnalysis" }
+      ]
+    },
+    {
+      "id": "spellbinder",
+      "category": "project",
+      "side": true,
+      "title": "Spellbinder",
+      "role": "Full-stack side project",
+      "importance": 5,
+      "start": 2023,
+      "end": null,
+      "summary": "Full-stack Spellbinder project. Repositories are private for now; a live link is planned.",
+      "links": []
+    },
+    {
+      "id": "reef",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Poseidon Reef",
+      "role": "Combine work project / inherited lead developer",
+      "importance": 5,
+      "start": 2023,
+      "end": null,
+      "summary": "Cross-platform dive-computer companion app (iOS/Android/Mac/PC). Took over development: vector-art redesign, accessibility (variable text sizing), and shipped the release. Built with React/Ionic/Capacitor.",
+      "links": [
+        { "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.poseidon.reef&hl=en&gl=US" },
+        { "label": "App Store", "url": "https://apps.apple.com/se/app/poseidon-reef/id1581432645?platform=ipad" }
+      ]
+    },
+    {
+      "id": "evo",
+      "category": "project",
+      "parentId": "code-institute",
+      "title": "EVO",
+      "role": "JavaScript game milestone",
+      "importance": 5,
+      "start": 2021,
+      "startMonth": 5,
+      "end": 2021,
+      "summary": "Second Code Institute milestone: a full JavaScript game built in Phaser 3, with homemade assets except the music.",
+      "links": [
+        { "label": "Live", "url": "https://jdygard.github.io/EVO/" },
+        { "label": "Code", "url": "https://github.com/JDygard/EVO" }
+      ]
+    }
+  ]
+}
