@@ -10,10 +10,9 @@ const app = (
   </React.StrictMode>
 );
 
-// In production the root already contains server-rendered markup, so hydrate it.
-// In `vite` dev the root is empty, so mount normally. This keeps `npm start`
-// working without a hydration warning.
-if (rootEl.hasChildNodes()) {
+// In production the root contains prerendered element markup, so hydrate it.
+// In `vite` dev it only contains the SSG placeholder comment, so mount normally.
+if (rootEl.firstElementChild) {
   hydrateRoot(rootEl, app);
 } else {
   createRoot(rootEl).render(app);

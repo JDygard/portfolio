@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import timelineData from '../data/timeline.json';
 import './Timeline.css';
 
@@ -399,7 +400,7 @@ function Timeline({ data = timelineData }) {
         </span>
       </button>
 
-      {isOpen && (
+      {isOpen && createPortal((
         <div className="tl-overlay" role="presentation" onClick={close}>
           <div
             className="tl-panel"
@@ -525,7 +526,7 @@ function Timeline({ data = timelineData }) {
             </div>
           </div>
         </div>
-      )}
+      ), document.body)}
     </section>
   );
 }

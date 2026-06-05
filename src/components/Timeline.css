@@ -398,7 +398,6 @@
 }
 
 .tl-has-children {
-  position: relative;
   justify-content: flex-start;
 }
 
