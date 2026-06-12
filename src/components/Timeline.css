@@ -86,6 +86,26 @@
   transition: transform 0.2s ease;
 }
 
+@media (max-width: 1024px) {
+  /* on mobile the launch card joins the intro section under the skills list */
+  .timeline-launch {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .timeline-launch h3 {
+    display: none;
+  }
+
+  .tl-launch-card {
+    max-width: 340px;
+  }
+}
+
 .tl-launch-card:hover .tl-launch-arrow {
   transform: translateX(4px);
 }
@@ -1269,11 +1289,22 @@
     mask-image: none;
   }
 
-  .tl-mob-count {
-    margin-top: 5px;
-    font-size: 0.64rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--c) 80%, #30333c);
+  /* keep wrapped pills from spilling past short, time-sized cards */
+  .tl-mob-canvas .tl-block.tl-has-children {
+    overflow: hidden;
+  }
+
+  /* project pills inside employer cards: wrap to multiple rows on mobile */
+  .tl-mob-canvas .tl-emp-pills {
+    flex-wrap: wrap;
+    height: auto;
+    max-height: none;
+    margin-top: 7px;
+    overflow: hidden;
+  }
+
+  .tl-mob-canvas .tl-emp-pill {
+    max-width: 100%;
   }
 
   /* active marker gets a clear highlight (it sits behind the open panel) */

@@ -40,10 +40,10 @@
 @media (max-width: 1024px) {
   .contacts {
     max-width: 100%;
-    text-align: left;
+    text-align: center;
   }
 
   .contacts ul {
-    justify-content: flex-start;
+    justify-content: center;
   }
 }

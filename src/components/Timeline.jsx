@@ -252,10 +252,11 @@ function Block({ item, categories, style, associatedItems, isActive, activeChild
   );
 }
 
-function MobileBlock({ item, categories, style, isActive, childCount = 0, skillState = null, setAnchor, onToggle }) {
+function MobileBlock({ item, categories, style, isActive, associatedItems = [], skillState = null, setAnchor, onToggle }) {
   const color = categories[item.category]?.color || '#888';
   const isSideProject = item.category === 'project' && item.side;
   const visualLevel = isSideProject ? importance(item) : 5;
+  const childCount = associatedItems.length;
   const cls = [
     'tl-block',
     `tl-${item.category}`,
@@ -301,7 +302,17 @@ function MobileBlock({ item, categories, style, isActive, childCount = 0, skillS
           <div className="tl-title">{item.title}</div>
           {item.role && <div className="tl-role">{item.role}</div>}
           {childCount > 0 && (
-            <span className="tl-mob-count">{childCount} project{childCount > 1 ? 's' : ''} &rsaquo;</span>
+            <div className="tl-emp-pills" aria-hidden="true">
+              {associatedItems.map((project) => (
+                <span
+                  key={project.id}
+                  className="tl-emp-pill"
+                  style={{ '--c': categories[project.category]?.color || color }}
+                >
+                  {project.title}
+                </span>
+              ))}
+            </div>
           )}
         </>
       )}
@@ -456,10 +467,25 @@ function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillCh
     const total = Math.max(cursor + OPEN_RUNOFF, MIN_YEAR_UNITS);
     const getItemLayout = (item) => {
       const monthScale = isMonthScaleItem(item);
+      const yUnits = yearUnits[item.start] || MIN_YEAR_UNITS;
+      const startFrac = Number.isFinite(item.startMonth)
+        ? ((item.startMonth - 1) / 12) * yUnits
+        : 0;
+
+      // month-range items (start and end month within one year) take their
+      // true duration, so e.g. a Jan-Apr stint doesn't claim the whole year
+      if (monthScale && Number.isFinite(item.endMonth) && item.endMonth > item.startMonth) {
+        const startUnits = (starts[item.start] || 0) + startFrac;
+        const widthUnits = Math.max(((item.endMonth - item.startMonth + 1) / 12) * yUnits, 0.3);
+        return { startUnits, widthUnits, endUnits: startUnits + widthUnits };
+      }
+
       const slot = monthScale
         ? slots[item.id] || { offset: 0, pointWidth: ITEM_SLOT_UNITS * POINT_BLOCK_RATIO }
         : { offset: 0, pointWidth: MIN_YEAR_UNITS };
-      const startUnits = (starts[item.start] || 0) + slot.offset;
+      // year-scale items honor an optional startMonth, so a job that begins
+      // mid-year starts after whatever preceded it instead of overlapping it
+      const startUnits = (starts[item.start] || 0) + (monthScale ? slot.offset : startFrac);
       const ongoing = item.end == null;
       const endUnits = ongoing ? total : (starts[item.end] || starts[max] || startUnits);
       const widthUnits = ongoing
@@ -667,6 +693,28 @@ function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillCh
     setActiveId(null);
     setActiveChildId(null);
   };
+
+  // horizontal swipe in the mobile canvas moves between lanes;
+  // mostly-vertical drags are left alone so time-scrolling still works
+  const touchStart = useRef(null);
+  const onLaneTouchStart = (e) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onLaneTouchEnd = (e) => {
+    const s = touchStart.current;
+    touchStart.current = null;
+    if (!s) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - s.x;
+    const dy = t.clientY - s.y;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    const idx = LANE_ORDER.indexOf(mobLane);
+    const next = dx < 0
+      ? Math.min(idx + 1, LANE_ORDER.length - 1)
+      : Math.max(idx - 1, 0);
+    if (LANE_ORDER[next] !== mobLane) switchMobLane(LANE_ORDER[next]);
+  };
   const mobPanelTop = activeItem ? vTop(mobLayout(activeItem).endUnits) : 0;
 
   return (
@@ -847,7 +895,12 @@ function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillCh
                 ))}
               </div>
 
-              <div className="tl-mob-scroll" ref={scrollRef}>
+              <div
+                className="tl-mob-scroll"
+                ref={scrollRef}
+                onTouchStart={onLaneTouchStart}
+                onTouchEnd={onLaneTouchEnd}
+              >
                 <div
                   className="tl-mob-canvas"
                   style={{ height: `${canvasHeight}px` }}
@@ -886,7 +939,7 @@ function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillCh
                                 categories={categories}
                                 style={mobBlockStyle(item)}
                                 isActive={activeId === item.id}
-                                childCount={childrenOf(item.id).length}
+                                associatedItems={childrenOf(item.id)}
                                 skillState={skillStateFor(item.id)}
                                 setAnchor={setAnchor}
                                 onToggle={toggle}

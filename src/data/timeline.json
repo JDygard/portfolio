@@ -7,8 +7,8 @@
   },
   "skillGroups": [
     { "label": "Daily drivers", "skills": ["React", "TypeScript", "Frontend Architecture", "State Management"] },
-    { "label": "Strong", "skills": ["UX/UI Design", "Data Visualization", "Maps / GIS", "Accessibility", "Node.js"] },
-    { "label": "Working knowledge", "skills": ["Python", "Mobile Development", "AWS", "C#/.NET"] }
+    { "label": "Strong", "skills": ["UX/UI Design", "Data Visualization", "Maps / GIS", "Accessibility", "Real-time Systems", "Node.js"] },
+    { "label": "Working knowledge", "skills": ["Python", "Mobile Development", "C#/.NET"] }
   ],
   "items": [
     {
@@ -107,8 +107,9 @@
       "role": "Frontend Engineer",
       "location": "Sweden",
       "start": 2023,
+      "startMonth": 5,
       "end": null,
-      "skills": ["React", "TypeScript", "Frontend Architecture", "State Management", "Node.js", "Data Visualization", "UX/UI Design", "AWS"],
+      "skills": ["React", "TypeScript", "Frontend Architecture", "State Management", "Node.js", "Data Visualization", "UX/UI Design"],
       "summary": "Primary frontend engineer across multiple products — responsible for frontend architecture, modernization efforts, design systems, state management strategy, UX direction and technical leadership across customer projects and internal platforms. Over time became the organization's frontend specialist, helping establish architecture, standards and frontend best practices.",
       "links": [
         { "label": "LinkedIn", "url": "https://www.linkedin.com/in/joel-dygard/" }
@@ -137,7 +138,7 @@
       "importance": 5,
       "start": 2023,
       "end": null,
-      "skills": ["React", "TypeScript", "Frontend Architecture", "State Management", "UX/UI Design"],
+      "skills": ["React", "TypeScript", "Frontend Architecture", "State Management", "UX/UI Design", "Real-time Systems"],
       "summary": "Industrial operator interface used in field workflows. Focused on real-time monitoring, workflow support and reliability in operational environments. Specific details covered by NDA.",
       "links": []
     },
@@ -150,7 +151,7 @@
       "importance": 4,
       "start": 2024,
       "end": null,
-      "skills": ["React", "TypeScript", "Maps / GIS", "Data Visualization"],
+      "skills": ["React", "TypeScript", "Maps / GIS", "Data Visualization", "Frontend Architecture", "State Management"],
       "summary": "Geospatial operational system built around MapLibre, including large-scale rail-network mapping and visualization. Specific details covered by NDA.",
       "links": []
     },
@@ -163,7 +164,7 @@
       "importance": 4,
       "start": 2025,
       "end": null,
-      "skills": ["React", "TypeScript", "Data Visualization", "Frontend Architecture"],
+      "skills": ["React", "TypeScript", "Data Visualization", "Frontend Architecture", "State Management"],
       "summary": "Industrial dashboard and reporting tooling for monitoring process repeatability — statistical views, automated reporting and operational insight for production environments. Specific details covered by NDA.",
       "links": []
     },
@@ -176,7 +177,7 @@
       "importance": 3,
       "start": 2023,
       "end": null,
-      "skills": ["React", "TypeScript", "State Management", "UX/UI Design"],
+      "skills": ["React", "TypeScript", "State Management", "Frontend Architecture", "UX/UI Design"],
       "summary": "Administrative platform for managing configuration, permissions, workflows and operational data across customer deployments.",
       "links": []
     },
@@ -189,7 +190,7 @@
       "importance": 4,
       "start": 2023,
       "end": 2024,
-      "skills": ["React", "Maps / GIS", "Data Visualization", "UX/UI Design"],
+      "skills": ["React", "Maps / GIS", "Data Visualization", "Frontend Architecture", "UX/UI Design"],
       "summary": "Operational dashboard supporting municipal water management and infrastructure monitoring through maps, visualization and decision-support tooling.",
       "links": []
     },
@@ -319,7 +320,7 @@
       "start": 2022,
       "startMonth": 6,
       "end": 2022,
-      "skills": ["React", "Node.js", "Data Visualization"],
+      "skills": ["React", "Node.js", "Frontend Architecture", "Data Visualization"],
       "summary": "Interactive climate and sustainability dashboard combining public statistical datasets with visual context and long-term trend analysis. Built to make complex environmental data understandable.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/howisearth" }
@@ -350,7 +351,7 @@
       "importance": 4,
       "start": 2024,
       "end": 2024,
-      "skills": ["Data Visualization"],
+      "skills": ["React", "Frontend Architecture", "Data Visualization"],
       "summary": "Data visualization and analytics project focused on NFL draft value, historical outcomes and narrative-driven presentation of complex statistical data.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/draftAnalysis" }
@@ -365,7 +366,7 @@
       "importance": 5,
       "start": 2023,
       "end": null,
-      "skills": ["React", "Node.js", "Frontend Architecture", "AWS"],
+      "skills": ["React", "Node.js", "Frontend Architecture", "State Management", "Real-time Systems"],
       "summary": "Ongoing multiplayer RPG project exploring full-stack application architecture, real-time systems, game design and long-term product development.",
       "links": []
     },

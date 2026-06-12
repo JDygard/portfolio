@@ -5,7 +5,7 @@ function ProfilePicture({ SvgComponent, style }) {
   const [drawn, setDrawn] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setDrawn(true), 2800);
+    const timer = window.setTimeout(() => setDrawn(true), 4000);
     return () => window.clearTimeout(timer);
   }, []);
 

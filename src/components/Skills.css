@@ -61,7 +61,21 @@
 }
 
 @media (max-width: 1024px) {
+  /* mobile reads top-down: rule, "Skills" heading, then tiers largest-first */
   .skills {
     max-width: 100%;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    border-top: 1px solid #111318;
+    padding-top: 16px;
+  }
+
+  .skills h3 {
+    margin: 0;
+  }
+
+  .skill-tier {
+    justify-content: center;
   }
 }
