@@ -1,29 +1,34 @@
 import React from 'react';
 import './Skills.css';
 
-function ProgressBar({ width }) {
-  return (
-    <div className="progressBar">
-      <div className="progressFill" style={{ width: `${width}%` }} />
-    </div>
-  );
-}
+function Skills({ groups = [], onSelectSkill }) {
+  if (!groups.length) return null;
 
-function Skills({ skillSet }) {
+  // least relevant tier on top, most relevant at the bottom, label last
+  const ordered = [...groups].reverse();
+
   return (
-    <section className="skills" data-tween-id="skills" aria-labelledby="skills-heading">
+    <section className="skills" aria-labelledby="skills-heading">
+      {ordered.map((group, idx) => (
+        <ul
+          key={group.label}
+          className={`skill-tier skill-tier-${ordered.length - idx}`}
+          aria-label={group.label}
+        >
+          {group.skills.map((skill) => (
+            <li key={skill}>
+              <button
+                type="button"
+                className="skill-chip"
+                onClick={() => onSelectSkill(skill)}
+              >
+                {skill}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ))}
       <h3 id="skills-heading">Skills</h3>
-      <ul>
-        {Object.entries(skillSet).map(([skill, level]) => (
-          <li key={skill}>
-            <span className="skillLabel">
-              <span>{skill}</span>
-              <span className="skillLevel">{level}</span>
-            </span>
-            <ProgressBar width={level} />
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }

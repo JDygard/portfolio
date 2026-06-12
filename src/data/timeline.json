@@ -1,11 +1,15 @@
 {
   "title": "Career & Projects",
-  "subtitle": "Helicopters to hypertext — a non-linear path into software.",
   "categories": {
     "employment": { "label": "Employment", "color": "#3f7cc0", "lane": "left" },
     "education":  { "label": "Education",  "color": "#ba6f6f", "lane": "mid" },
     "project":    { "label": "Side Projects", "color": "#d59320", "lane": "right" }
   },
+  "skillGroups": [
+    { "label": "Daily drivers", "skills": ["React", "TypeScript", "Frontend Architecture", "State Management"] },
+    { "label": "Strong", "skills": ["UX/UI Design", "Data Visualization", "Maps / GIS", "Accessibility", "Node.js"] },
+    { "label": "Working knowledge", "skills": ["Python", "Mobile Development", "AWS", "C#/.NET"] }
+  ],
   "items": [
     {
       "id": "army",
@@ -78,7 +82,22 @@
       "location": "Dublin (remote)",
       "start": 2021,
       "end": 2023,
+      "skills": ["HTML & CSS", "React", "Python"],
       "summary": "Accredited full-stack diploma — the deliberate pivot from wrenches to web. HTML/CSS/JS through Python, Django and React.",
+      "links": []
+    },
+    {
+      "id": "synteda",
+      "category": "employment",
+      "title": "Synteda",
+      "role": "Software Engineering Intern",
+      "location": "Sweden",
+      "start": 2023,
+      "startMonth": 1,
+      "endMonth": 4,
+      "end": 2023,
+      "skills": ["C#/.NET"],
+      "summary": "Internship working on ReInk — hands-on C#/.NET development as part of the transition from retraining into professional software work.",
       "links": []
     },
     {
@@ -89,7 +108,8 @@
       "location": "Sweden",
       "start": 2023,
       "end": null,
-      "summary": "Frontend engineer building data-science, ML and LLM tooling. Owner of the generalized dashboard UX across customer engagements.",
+      "skills": ["React", "TypeScript", "Frontend Architecture", "State Management", "Node.js", "Data Visualization", "UX/UI Design", "AWS"],
+      "summary": "Primary frontend engineer across multiple products — responsible for frontend architecture, modernization efforts, design systems, state management strategy, UX direction and technical leadership across customer projects and internal platforms. Over time became the organization's frontend specialist, helping establish architecture, standards and frontend best practices.",
       "links": [
         { "label": "LinkedIn", "url": "https://www.linkedin.com/in/joel-dygard/" }
       ]
@@ -101,10 +121,11 @@
       "parentId": "combine",
       "title": "Combine Technology Platform",
       "role": "Combine work project",
-      "importance": 5,
+      "importance": 4,
       "start": 2023,
       "end": null,
-      "summary": "A multipurpose data dashboard for use with Accelerator data science projects.",
+      "skills": ["React", "State Management", "Frontend Architecture", "Node.js", "Data Visualization", "UX/UI Design"],
+      "summary": "Shared platform used across multiple data-science and analytics projects. Focused on reusable architecture, visualization and rapid development of customer solutions.",
       "links": []
     },
     {
@@ -116,7 +137,34 @@
       "importance": 5,
       "start": 2023,
       "end": null,
-      "summary": "Operator-facing HMI project for field workflows. Details are covered by an NDA.",
+      "skills": ["React", "TypeScript", "Frontend Architecture", "State Management", "UX/UI Design"],
+      "summary": "Industrial operator interface used in field workflows. Focused on real-time monitoring, workflow support and reliability in operational environments. Specific details covered by NDA.",
+      "links": []
+    },
+    {
+      "id": "redemptor",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Special System “Redemptor”",
+      "role": "Combine work project",
+      "importance": 4,
+      "start": 2024,
+      "end": null,
+      "skills": ["React", "TypeScript", "Maps / GIS", "Data Visualization"],
+      "summary": "Geospatial operational system built around MapLibre, including large-scale rail-network mapping and visualization. Specific details covered by NDA.",
+      "links": []
+    },
+    {
+      "id": "repeatability-monitoring",
+      "category": "project",
+      "parentId": "combine",
+      "title": "Repeatability Monitoring",
+      "role": "Combine work project",
+      "importance": 4,
+      "start": 2025,
+      "end": null,
+      "skills": ["React", "TypeScript", "Data Visualization", "Frontend Architecture"],
+      "summary": "Industrial dashboard and reporting tooling for monitoring process repeatability — statistical views, automated reporting and operational insight for production environments. Specific details covered by NDA.",
       "links": []
     },
     {
@@ -125,10 +173,11 @@
       "parentId": "combine",
       "title": "Admin Dashboard",
       "role": "Combine work project",
-      "importance": 5,
+      "importance": 3,
       "start": 2023,
       "end": null,
-      "summary": "Administrative dashboard for configuring and managing operator-facing workflows.",
+      "skills": ["React", "TypeScript", "State Management", "UX/UI Design"],
+      "summary": "Administrative platform for managing configuration, permissions, workflows and operational data across customer deployments.",
       "links": []
     },
     {
@@ -140,7 +189,8 @@
       "importance": 4,
       "start": 2023,
       "end": 2024,
-      "summary": "Dashboard for municipal water management, focused on operational visibility and decision support.",
+      "skills": ["React", "Maps / GIS", "Data Visualization", "UX/UI Design"],
+      "summary": "Operational dashboard supporting municipal water management and infrastructure monitoring through maps, visualization and decision-support tooling.",
       "links": []
     },
 
@@ -150,10 +200,11 @@
       "parentId": "code-institute",
       "title": "Belltini",
       "role": "HTML & CSS milestone",
-      "importance": 3,
+      "importance": 2,
       "start": 2021,
       "startMonth": 4,
       "end": 2021,
+      "skills": ["HTML & CSS"],
       "summary": "First Code Institute project: a fresh pasta website, live on GitHub Pages and built with HTML and CSS only.",
       "links": [
         { "label": "Live", "url": "https://jdygard.github.io/belltini/index.html" },
@@ -171,6 +222,7 @@
       "startMonth": 9,
       "endMonth": 11,
       "end": 2021,
+      "skills": ["Python"],
       "summary": "Third Code Institute milestone project. Not currently live; linked to the repository.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/dominant_chaos" }
@@ -186,6 +238,7 @@
       "start": 2021,
       "startMonth": 6,
       "end": 2021,
+      "skills": ["Python", "HTML & CSS"],
       "summary": "Side project for learning Flask. Not currently live; linked to the repository.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/flask-task-manager" }
@@ -202,6 +255,7 @@
       "startMonth": 1,
       "endMonth": 2,
       "end": 2022,
+      "skills": ["Python", "HTML & CSS"],
       "summary": "Fourth Code Institute milestone project. Not currently live; linked to the repository.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/BarkFarmers" }
@@ -213,10 +267,11 @@
       "side": true,
       "title": "Tinibell",
       "role": "Local business website",
-      "importance": 5,
+      "importance": 3,
       "start": 2022,
       "startMonth": 3,
       "end": 2022,
+      "skills": ["HTML & CSS", "UX/UI Design"],
       "summary": "Website project for Tinibell Pasta, a local business in my area. The site is not currently live.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/tinibell" }
@@ -228,10 +283,11 @@
       "side": true,
       "title": "React Lights Out",
       "role": "React game",
-      "importance": 3,
+      "importance": 2,
       "start": 2022,
       "startMonth": 4,
       "end": 2022,
+      "skills": ["React"],
       "summary": "React implementation of the Lights Out puzzle game.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/react-lights-out" }
@@ -247,6 +303,7 @@
       "start": 2022,
       "startMonth": 6,
       "end": 2022,
+      "skills": ["React", "Node.js"],
       "summary": "Full-stack React project from the Code Institute years.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/bubblepopper" }
@@ -262,7 +319,8 @@
       "start": 2022,
       "startMonth": 6,
       "end": 2022,
-      "summary": "Full-stack React project, marked as one to get live.",
+      "skills": ["React", "Node.js", "Data Visualization"],
+      "summary": "Interactive climate and sustainability dashboard combining public statistical datasets with visual context and long-term trend analysis. Built to make complex environmental data understandable.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/howisearth" }
       ]
@@ -277,7 +335,8 @@
       "start": 2023,
       "startMonth": 3,
       "end": 2023,
-      "summary": "React project for a fake machine company, built over a weekend as a wild bid to get a job at a company. It worked.",
+      "skills": ["React", "UX/UI Design"],
+      "summary": "Rapid prototype built over a weekend to demonstrate frontend design, branding and UX capabilities. Successfully led to an interview and employment offer.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/Frost-Air-and-Kinetic-Energy" }
       ]
@@ -291,7 +350,8 @@
       "importance": 4,
       "start": 2024,
       "end": 2024,
-      "summary": "Football draft analysis and storytelling project.",
+      "skills": ["Data Visualization"],
+      "summary": "Data visualization and analytics project focused on NFL draft value, historical outcomes and narrative-driven presentation of complex statistical data.",
       "links": [
         { "label": "Code", "url": "https://github.com/JDygard/draftAnalysis" }
       ]
@@ -305,8 +365,24 @@
       "importance": 5,
       "start": 2023,
       "end": null,
-      "summary": "Full-stack Spellbinder project. Repositories are private for now; a live link is planned.",
+      "skills": ["React", "Node.js", "Frontend Architecture", "AWS"],
+      "summary": "Ongoing multiplayer RPG project exploring full-stack application architecture, real-time systems, game design and long-term product development.",
       "links": []
+    },
+    {
+      "id": "portfolio",
+      "category": "project",
+      "side": true,
+      "title": "This Portfolio",
+      "role": "Personal site",
+      "importance": 4,
+      "start": 2024,
+      "end": null,
+      "skills": ["React", "Frontend Architecture", "UX/UI Design", "AWS"],
+      "summary": "This site — a statically generated React portfolio built around a custom interactive career-timeline engine with skill-linked filtering.",
+      "links": [
+        { "label": "Code", "url": "https://github.com/JDygard/portfolio" }
+      ]
     },
     {
       "id": "reef",
@@ -317,7 +393,8 @@
       "importance": 5,
       "start": 2023,
       "end": null,
-      "summary": "Cross-platform dive-computer companion app (iOS/Android/Mac/PC). Took over development: vector-art redesign, accessibility (variable text sizing), and shipped the release. Built with React/Ionic/Capacitor.",
+      "skills": ["React", "State Management", "Frontend Architecture", "Mobile Development", "Accessibility", "UX/UI Design"],
+      "summary": "Inherited lead developer for a cross-platform dive-computer companion application (iOS, Android, Mac and Windows). Responsible for modernization, frontend architecture, offline-first synchronization, accessibility improvements, UX redesign and ongoing feature development.",
       "links": [
         { "label": "Google Play", "url": "https://play.google.com/store/apps/details?id=com.poseidon.reef&hl=en&gl=US" },
         { "label": "App Store", "url": "https://apps.apple.com/se/app/poseidon-reef/id1581432645?platform=ipad" }
@@ -333,6 +410,7 @@
       "start": 2021,
       "startMonth": 5,
       "end": 2021,
+      "skills": ["Phaser", "HTML & CSS"],
       "summary": "Second Code Institute milestone: a full JavaScript game built in Phaser 3, with homemade assets except the music.",
       "links": [
         { "label": "Live", "url": "https://jdygard.github.io/EVO/" },

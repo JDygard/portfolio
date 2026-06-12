@@ -1,6 +1,6 @@
-/* ---------- Launch card (sits in the old Skills slot) ---------- */
+/* ---------- Launch card ---------- */
 .timeline-launch {
-  grid-area: skills;
+  grid-area: timeline;
   justify-self: start;
   align-self: start;
   width: 100%;
@@ -45,31 +45,20 @@
   outline-offset: 3px;
 }
 
-.tl-launch-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 30px;
+/* mini static preview of the real timeline data */
+.tl-launch-mini {
   flex-shrink: 0;
+  width: 88px;
+  height: 34px;
+  display: block;
 }
 
-.tl-launch-bars span {
-  width: 7px;
-  border-radius: 3px;
-  background: var(--c);
-  opacity: 0.85;
+.tl-launch-mini rect {
+  transition: opacity 0.25s ease;
 }
 
-.tl-launch-bars span:nth-child(1) { height: 60%; }
-.tl-launch-bars span:nth-child(2) { height: 100%; }
-.tl-launch-bars span:nth-child(3) { height: 40%; }
-
-.tl-launch-card:hover .tl-launch-bars span:nth-child(1) { height: 100%; }
-.tl-launch-card:hover .tl-launch-bars span:nth-child(2) { height: 50%; }
-.tl-launch-card:hover .tl-launch-bars span:nth-child(3) { height: 80%; }
-
-.tl-launch-bars span {
-  transition: height 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+.tl-launch-card:hover .tl-launch-mini rect {
+  opacity: 1;
 }
 
 .tl-launch-text {
@@ -200,16 +189,97 @@
   margin: -2px -4px 0 auto;
   border: 0;
   border-radius: 5px;
-  background: #ececec;
   color: #111318;
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
-  transition: background 0.18s ease;
+  transition: background 0.18s ease;  
+  border-right: 1px solid black;
+  border-left: 1px solid black;
 }
 
 .tl-close:hover { background: #ffffff; }
 .tl-close:focus-visible { outline: 2px solid #ba6f6f; outline-offset: 2px; }
+
+/* ---------- Skill highlight bar ---------- */
+.tl-skillbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  padding: 9px 22px 10px;
+  border-bottom: 1px solid #ece4d6;
+  background: #fbf8f2;
+}
+
+.tl-skill-chip {
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5a554f;
+  background: transparent;
+  border: 1px solid #ddd4c4;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.tl-skill-chip:hover {
+  border-color: #ba6f6f;
+  color: #1d2028;
+  transform: translateY(-1px);
+}
+
+.tl-skill-chip:focus-visible {
+  outline: 2px solid #ba6f6f;
+  outline-offset: 2px;
+}
+
+.tl-skill-chip.is-on {
+  background: #ba6f6f;
+  border-color: #ba6f6f;
+  color: #fbf8f2;
+}
+
+.tl-skill-clear {
+  margin-left: auto;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #9a8f84;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.16s ease, opacity 0.16s ease;
+}
+
+.tl-skill-clear:hover:not(:disabled) { color: #1d2028; }
+.tl-skill-clear:disabled { opacity: 0.35; cursor: default; }
+
+/* matched / non-matched blocks while a skill is selected */
+.tl-block.tl-skill-dim {
+  opacity: 0.16;
+  filter: saturate(0.3);
+}
+
+.tl-block.tl-skill-hit {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--c) 75%, transparent),
+    0 8px 20px color-mix(in srgb, var(--c) 26%, transparent);
+}
+
+.tl-emp-child.tl-skill-dim { opacity: 0.3; }
+
+.tl-emp-child.tl-skill-hit {
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--c) 80%, transparent);
+}
+
+.tl-block.tl-skill-dim,
+.tl-block.tl-skill-hit {
+  transition: opacity 0.28s ease, filter 0.28s ease, box-shadow 0.28s ease;
+}
 
 /* ---------- Body: fixed label gutter + horizontal scroll canvas ---------- */
 .tl-body {
@@ -356,7 +426,7 @@
   will-change: transform;
   animation: tlBlockIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: calc(var(--i) * 0.05s + 0.12s);
-  transition: transform 0.26s ease-out, box-shadow 0.26s ease-out, background 0.22s ease, border-color 0.22s ease, height 0.3s cubic-bezier(0.22, 1, 0.36, 1), top 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.26s ease-out, box-shadow 0.26s ease-out, background 0.22s ease, border-color 0.22s ease, height 0.42s cubic-bezier(0.4, 0, 0.2, 1), top 0.42s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tl-block.tl-r {
@@ -378,15 +448,19 @@
 .tl-block:focus-visible,
 .tl-block.is-active {
   transform: translateY(-4px) scale(1.045);
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.02)),
-    color-mix(in srgb, var(--c) 24%, transparent);
-  border-color: color-mix(in srgb, var(--c) 58%, transparent);
   box-shadow:
     0 18px 38px -8px color-mix(in srgb, var(--c) 31%, transparent),
     0 8px 18px color-mix(in srgb, var(--c) 20%, transparent);
   z-index: 20;
   outline: none;
+}
+
+/* hover only lifts (no recolor); the selected pane keeps a filled state */
+.tl-block.is-active {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.02)),
+    color-mix(in srgb, var(--c) 24%, transparent);
+  border-color: color-mix(in srgb, var(--c) 58%, transparent);
 }
 
 .tl-block.tl-side {
@@ -528,12 +602,22 @@
 }
 
 /* ---------- Project panes inside an expanded employer ---------- */
+.tl-emp-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
 .tl-emp-children {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 7px;
   min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .tl-emp-child {
@@ -683,38 +767,66 @@
   outline: none;
 }
 
-/* ---------- Tooltip ---------- */
+/* ---------- Detail popover (minimal, lane-tinted) ---------- */
 .tl-tip {
   position: absolute;
   z-index: 40;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   left: 0;
-  width: 320px;
+  width: 300px;
   max-width: 72vw;
-  padding: 11px 13px;
-  background: #ffffff;
+  padding: 15px 17px;
+  background: #fffdf9;
   color: #1d2028;
-  border: 1px solid #e7dfd1;
-  border-radius: 5px;
-  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ebe3d5;
+  border-radius: 10px;
+  box-shadow: 0 14px 34px -10px rgba(20, 22, 28, 0.24), 0 2px 6px rgba(20, 22, 28, 0.05);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(5px);
-  transition: opacity 0.16s ease, transform 0.16s ease;
+  transform: translateY(6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
   pointer-events: none;
   text-align: left;
   white-space: normal;
 }
 
-.tl-tip-left {
-  left: auto;
-  right: 0;
-}
+.tl-tip-left { left: auto; right: 0; }
 
 .tl-tip-up {
   top: auto;
-  bottom: calc(100% + 8px);
-  transform: translateY(-5px);
+  bottom: calc(100% + 10px);
+  transform: translateY(-6px);
+}
+
+/* portal popover: fixed, JS-positioned, never clipped by the scroll/panel */
+.tl-tip.tl-pop {
+  position: fixed;
+  display: block;
+  margin: 0;
+  width: 304px;
+  max-width: min(90vw, 340px);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 16px 18px 17px;
+  background: #fffdf9;
+  border: 1px solid color-mix(in srgb, var(--c, #b3a99e) 24%, #ebe3d5);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--c, #b3a99e) 12%, transparent),
+    0 18px 44px -12px rgba(20, 22, 28, 0.30),
+    0 3px 10px rgba(20, 22, 28, 0.06);
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+  z-index: 1100;
+  scrollbar-width: thin;
+  animation: tlPopIn 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes tlPopIn {
+  from { opacity: 0; transform: translateY(-5px) scale(0.985); }
+  to { opacity: 1; transform: none; }
 }
 
 .tl-block:hover > .tl-tip,
@@ -727,61 +839,75 @@
   pointer-events: auto;
 }
 
-.tl-expanded > .tl-tip {
-  display: none;
-}
+.tl-expanded > .tl-tip { display: none; }
 
-.tl-tip-role {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #ba6f6f;
+/* eyebrow: the dates, tinted with the lane colour */
+.tl-tip-eyebrow {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--c, #ba6f6f) 72%, #6b6359);
 }
 
 .tl-tip-title {
-  font-size: 0.86rem;
+  margin-top: 5px;
+  font-size: 0.98rem;
   font-weight: 700;
-  line-height: 1.2;
-  color: #1d2028;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: #1b1e26;
 }
 
-.tl-tip-title + .tl-tip-role {
-  margin-top: 3px;
+.tl-tip-role {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--c, #ba6f6f) 80%, #4a453f);
 }
+
+.tl-tip-title + .tl-tip-role { margin-top: 4px; }
 
 .tl-tip-loc {
+  margin-top: 3px;
   font-size: 0.72rem;
+  font-weight: 500;
   color: #9a8f84;
-  margin-top: 1px;
 }
 
 .tl-tip-summary {
-  margin: 7px 0 0;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  color: #3a3832;
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid #f0e9dc;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #45433d;
 }
 
 .tl-tip-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 7px;
+  margin-top: 13px;
 }
 
 .tl-tip-links a {
-  font-size: 0.76rem;
+  font-size: 0.73rem;
   font-weight: 600;
-  color: #1d2028;
+  letter-spacing: 0.01em;
+  color: #2b2e36;
   text-decoration: none;
-  padding: 4px 10px;
-  border: 1px solid #d8cfbf;
-  border-radius: 4px;
-  transition: background 0.16s ease, border-color 0.16s ease;
+  padding: 5px 13px;
+  border: 1px solid color-mix(in srgb, var(--c, #b3a99e) 32%, #ddd4c4);
+  border-radius: 999px;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 }
 
 .tl-tip-links a:hover {
-  background: #f6f1e7;
-  border-color: #ba6f6f;
+  background: color-mix(in srgb, var(--c, #ba6f6f) 12%, #fbf6ec);
+  border-color: color-mix(in srgb, var(--c, #ba6f6f) 58%, transparent);
+  color: #1b1e26;
+  transform: translateY(-1px);
 }
 
 .tl-associated {
@@ -892,7 +1018,10 @@
   }
 }
 
-/* ---------- Mobile: collapse lanes into a stacked, grouped card stream ---------- */
+/* ---------- Mobile: a vertical mirror of the horizontal timeline ----------
+   Time runs top (now) -> bottom (oldest). Career = left column, projects =
+   middle (on the spine), education = right column. Tapping any item opens a
+   full-width detail panel that covers the other columns until it's closed. */
 @media (max-width: 768px) {
   .tl-overlay {
     padding: 0;
@@ -916,148 +1045,368 @@
     order: 3;
   }
 
-  .tl-body {
-    display: block;
-    overflow: auto;
-  }
-
-  .tl-gutter {
-    display: none;
-  }
-
-  .tl-scroll {
-    overflow: visible;
-    padding: 14px 16px 28px;
-  }
-
-  .tl-canvas {
-    width: auto !important;
-    padding-bottom: 0;
-  }
-
-  .tl-axis-h,
-  .tl-grid {
-    display: none;
-  }
-
-  .tl-lanes {
+  .tl-mob-body {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    flex: 1;
+    min-height: 0;
   }
 
-  .tl-lane {
-    height: auto !important;
-    margin-bottom: 0;
+  /* lane switcher: one tab per category */
+  .tl-mob-cols {
+    flex-shrink: 0;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 6px;
+    padding: 9px 14px;
+    border-bottom: 1px solid #ece4d6;
+    background: #fbf8f2;
   }
 
-  .tl-lane-heading {
-    display: block;
-    font-size: 0.74rem;
+  .tl-mob-col {
+    flex: 1;
+    padding: 6px 4px;
+    font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--lc) 72%, #30333c);
-    border-bottom: 1px solid #ece4d6;
-    padding-bottom: 5px;
+    text-align: center;
+    color: color-mix(in srgb, var(--c) 78%, #30333c);
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--c) 32%, transparent);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease;
   }
 
-  .tl-block {
-    position: static !important;
-    top: auto !important;
-    left: auto !important;
-    width: auto !important;
-    height: auto !important;
-    min-width: 0;
+  .tl-mob-col.is-open {
+    background: color-mix(in srgb, var(--c) 14%, transparent);
+    border-color: color-mix(in srgb, var(--c) 75%, transparent);
+  }
+
+  .tl-mob-col:focus-visible {
+    outline: 2px solid #ba6f6f;
+    outline-offset: 2px;
+  }
+
+  .tl-mob-scroll {
+    position: relative;
+    flex: 1;
     min-height: 0;
-    border-left: 4px solid color-mix(in srgb, var(--c) 75%, transparent);
-    padding: 10px 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, #30333c 32%, transparent) transparent;
   }
 
-  .tl-title {
-    white-space: normal;
+  .tl-mob-scroll::-webkit-scrollbar { width: 7px; }
+  .tl-mob-scroll::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, #30333c 26%, transparent);
+    border-radius: 999px;
   }
 
-  .tl-role {
-    white-space: normal;
+  .tl-mob-canvas {
+    position: relative;
+    width: 100%;
+    padding: 6px 14px 40px;
+    box-sizing: border-box;
   }
 
-  .tl-block:hover,
-  .tl-block:focus-visible,
-  .tl-block.is-active {
+  /* accordion rails: expanded lane dominates, collapsed lanes are slim strips */
+  .tl-mob-rails {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 36px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .tl-mob-rail {
+    position: relative;
+    flex: 0 0 24px;
+    min-width: 0;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--c) 7%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+    cursor: pointer;
+    transition: flex-grow 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tl-mob-rail:not(.is-open):hover,
+  .tl-mob-rail:not(.is-open):focus-visible {
+    background: color-mix(in srgb, var(--c) 16%, transparent);
+    border-color: color-mix(in srgb, var(--c) 55%, transparent);
+    outline: none;
+  }
+
+  .tl-mob-rail.is-open {
+    flex: 1 1 auto;
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+  }
+
+  /* textless previews inside collapsed rails */
+  .tl-mob-mini {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--c) 50%, #fbf8f2);
+    border: 1px solid color-mix(in srgb, var(--c) 65%, transparent);
+    pointer-events: none;
+  }
+
+  .tl-mob-mini-dot {
+    left: 50%;
+    right: auto;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    border-radius: 999px;
+    background: var(--c);
+    border: 0;
+  }
+
+  .tl-mob-mini.tl-skill-dim { opacity: 0.15; }
+
+  .tl-mob-mini.tl-skill-hit {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 80%, transparent);
+  }
+
+  /* year separators with a label at the left edge */
+  .tl-mob-tick {
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    border-top: 1px dashed rgba(48, 51, 60, 0.10);
+    padding-left: 2px;
+    font-size: 0.64rem;
+    font-weight: 600;
+    color: #b3a99e;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* blocks become absolutely-time-positioned cards anchored to their column */
+  .tl-mob-canvas .tl-block {
+    position: absolute;
+    box-sizing: border-box;
+    min-width: 0;
+    z-index: 2;
+    animation: none;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tl-mob-canvas .tl-block,
+  .tl-mob-canvas .tl-block:hover,
+  .tl-mob-canvas .tl-block:focus-visible,
+  .tl-mob-canvas .tl-block.is-active {
     transform: none;
   }
 
-  .tl-block.tl-ongoing {
+  /* expanded-lane cards: uniform left-accent style, full rail width */
+  .tl-mob-canvas .tl-block {
+    left: 0;
+    right: 0;
+    text-align: left;
+    align-items: flex-start;
+    border-left: 3px solid color-mix(in srgb, var(--c) 70%, transparent);
+    padding: 8px 11px;
+    background: color-mix(in srgb, var(--c) 7%, #fbf8f2);
+  }
+
+  /* dots and named chips float on the right edge, above the column bars */
+  .tl-mob-canvas .tl-dot-project {
+    left: auto;
+    right: 4px;
+    border-left-width: 1.5px;
+    padding: 0;
+    align-items: center;
+    z-index: 6;
+  }
+
+  .tl-mob-canvas .tl-named-project {
+    left: auto;
+    right: 0;
+    max-width: 58%;
+    padding: 5px 9px;
+    z-index: 6;
+    background: color-mix(in srgb, var(--c) 9%, #fdfbf7);
+  }
+
+  /* child-project dots inside a collapsed parent's rail bar */
+  .tl-mob-mini-kid {
+    position: absolute;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    margin-left: -3.5px;
+    border-radius: 999px;
+    background: var(--c);
+    border: 1px solid #fbf8f2;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .tl-mob-mini-kid.tl-skill-dim { opacity: 0.15; }
+
+  .tl-mob-mini-kid.tl-skill-hit {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 80%, transparent);
+  }
+
+  .tl-mob-canvas .tl-block .tl-title,
+  .tl-mob-canvas .tl-block .tl-role,
+  .tl-mob-canvas .tl-block .tl-yrs {
+    white-space: normal;
+  }
+
+  .tl-mob-canvas .tl-block.tl-ongoing {
     -webkit-mask-image: none;
     mask-image: none;
   }
 
-  .tl-yrs {
-    white-space: normal;
+  .tl-mob-count {
+    margin-top: 5px;
+    font-size: 0.64rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--c) 80%, #30333c);
   }
 
-  .tl-chips {
+  /* active marker gets a clear highlight (it sits behind the open panel) */
+  .tl-mob-canvas .tl-block.is-active {
+    border-color: color-mix(in srgb, var(--c) 62%, transparent);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--c) 26%, transparent);
+  }
+
+  /* ---- full-width expand / detail panel ---- */
+  @keyframes tlMobCardIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .tl-mob-card {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    z-index: 20;
+    box-sizing: border-box;
+    max-height: 78vh;
+    overflow-y: auto;
+    padding: 14px 16px 16px;
+    background: #ffffff;
+    border: 1px solid color-mix(in srgb, var(--c) 40%, #e7dfd1);
+    border-left: 4px solid var(--c);
+    border-radius: 7px;
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+    text-align: left;
+    animation: tlMobCardIn 0.22s ease forwards;
+    scrollbar-width: thin;
+  }
+
+  .tl-mob-card-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 6px;
+    background: #f0ece3;
+    color: #1d2028;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .tl-mob-card-close:hover { background: #e6e0d4; }
+
+  .tl-mob-card-yrs {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--c) 64%, #30333c);
+  }
+
+  .tl-mob-card-title {
+    margin-top: 2px;
+    padding-right: 34px;
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #1d2028;
+    line-height: 1.2;
+  }
+
+  .tl-mob-card-role {
+    margin-top: 3px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #ba6f6f;
+  }
+
+  .tl-mob-card-loc {
+    margin-top: 1px;
+    font-size: 0.74rem;
+    color: #9a8f84;
+  }
+
+  .tl-mob-card-summary {
+    margin: 9px 0 0;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: #3a3832;
+  }
+
+  .tl-mob-card .tl-tip-links {
+    margin-top: 11px;
+  }
+
+  .tl-mob-card-children {
+    margin-top: 13px;
+    padding-top: 11px;
+    border-top: 1px solid #ece4d6;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    gap: 7px;
   }
 
-  .tl-chip {
-    max-width: 100%;
+  .tl-mob-card-children-head {
+    margin-bottom: 2px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #9a8f84;
   }
 
-  .tl-flyout {
-    position: static;
-    width: auto;
-    max-height: none;
-    overflow: visible;
-    box-shadow: none;
-    border: 0;
-    border-top: 1px solid #ece4d6;
-    border-radius: 0;
-    padding: 10px 0 0;
-    margin-top: 10px;
-    animation: none;
+  .tl-mob-card-children .tl-emp-child {
+    padding: 8px 10px;
   }
 
-  .tl-canvas.is-expanded {
-    padding-bottom: 0;
+  .tl-mob-child-role {
+    margin-top: 2px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #ba6f6f;
   }
 
-  /* tap-to-expand inline details on touch */
-  .tl-tip {
-    position: static;
-    width: auto;
-    max-width: none;
-    box-shadow: none;
-    border: 0;
-    border-top: 1px solid #ece4d6;
-    border-radius: 0;
-    background: transparent;
-    padding: 9px 0 0;
-    margin-top: 9px;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    pointer-events: auto;
-    display: none;
+  .tl-mob-child-detail {
+    margin-top: 7px;
+    padding-top: 7px;
+    border-top: 1px solid color-mix(in srgb, var(--c) 22%, #ece4d6);
   }
 
-  .tl-tip-up {
-    bottom: auto;
+  .tl-mob-child-detail p {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: #3a3832;
   }
 
-  .tl-block.is-active > .tl-tip,
-  .tl-chip.is-active > .tl-tip {
-    display: block;
-  }
-
-  .tl-chip .tl-tip {
-    border-top: 0;
-    padding-top: 4px;
-    margin-top: 4px;
+  .tl-mob-child-detail .tl-tip-links {
+    margin-top: 8px;
   }
 }

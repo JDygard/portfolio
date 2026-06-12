@@ -1,16 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import timelineData from '../data/timeline.json';
 import './Timeline.css';
 
 const NOW_YEAR = new Date().getFullYear();
 const PX_PER_UNIT = 150; // desktop horizontal scale for one quiet year
+const V_PX_PER_UNIT = 110; // mobile vertical scale for one quiet year
+const MOBILE_MQ = '(max-width: 768px)';
 const OPEN_RUNOFF = 1.4; // years of track past 'now' for ongoing items to run off & fade
 const MIN_YEAR_UNITS = 1;
 const ITEM_SLOT_UNITS = 0.9;
 const POINT_BLOCK_RATIO = 0.78;
 const SIDE_PROJECT_UNITS = { 1: 0.16, 2: 0.2, 3: 0.26, 4: 0.45, 5: 0.6 };
-const LANE_BASE_HEIGHT = { employment: 88, project: 66, education: 72 };
+const LANE_BASE_HEIGHT = { employment: 88, project: 66, education: 80 };
 const LANE_ROW_GAP = 10;
 const LANE_ORDER = ['employment', 'project', 'education'];
 const MONTH_LABELS = [null, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -21,7 +22,7 @@ const isMonthScaleItem = (item) => item.end === item.start && Number.isFinite(it
 const importance = (item) => Math.max(1, Math.min(5, Number.isFinite(item.importance) ? item.importance : 5));
 const monthSlotUnits = (item) => (item.side ? SIDE_PROJECT_UNITS[importance(item)] : ITEM_SLOT_UNITS);
 
-const PARENT_HEADER_H = 46; // employer header (years/title/role) atop the expanded overlay
+const PARENT_HEADER_H = 62; // employer header (years/title/role) atop the expanded overlay
 const CHILD_GAP = 4;
 const childCardHeight = (project) => {
   const lvl = importance(project);
@@ -77,11 +78,71 @@ function Tip({ item, side, up, showTitle = false }) {
   );
 }
 
-function Block({ item, categories, style, tipSide, tipUp, associatedItems, isActive, activeChildId, childTipLeft, onToggle, onToggleChild }) {
+function DetailPopover({ item, anchorEl, accent }) {
+  const ref = useRef(null);
+  const [pos, setPos] = useState(null);
+
+  useLayoutEffect(() => {
+    if (!anchorEl) return undefined;
+    const place = () => {
+      const el = ref.current;
+      if (!el) return;
+      const a = anchorEl.getBoundingClientRect();
+      const p = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const M = 10;
+      const GAP = 12;
+      // anchor to the block itself: open beside whichever edge has room
+      let left = a.right + GAP;
+      if (left + p.width + M > vw) left = a.left - GAP - p.width;
+      left = Math.max(M, Math.min(left, vw - p.width - M));
+      // vertically aligned with the top of the block
+      let top = a.top;
+      top = Math.max(M, Math.min(top, vh - p.height - M));
+      setPos({ left, top });
+    };
+    place();
+    window.addEventListener('scroll', place, true);
+    window.addEventListener('resize', place);
+    return () => {
+      window.removeEventListener('scroll', place, true);
+      window.removeEventListener('resize', place);
+    };
+  }, [anchorEl, item]);
+
+  if (!item) return null;
+
+  return createPortal(
+    <div
+      ref={ref}
+      className="tl-tip tl-pop"
+      role="tooltip"
+      style={{
+        left: pos ? `${pos.left}px` : '-9999px',
+        top: pos ? `${pos.top}px` : '-9999px',
+        visibility: pos ? 'visible' : 'hidden',
+        '--c': accent,
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="tl-tip-eyebrow">{yearLabel(item)}</div>
+      <div className="tl-tip-title">{item.title}</div>
+      {item.role && <div className="tl-tip-role">{item.role}</div>}
+      {item.location && <div className="tl-tip-loc">{item.location}</div>}
+      {item.summary && <p className="tl-tip-summary">{item.summary}</p>}
+      <ProjectLinks links={item.links} />
+    </div>,
+    document.body,
+  );
+}
+
+function Block({ item, categories, style, associatedItems, isActive, activeChildId, skillStateFor = () => null, setAnchor, onHover, onLeave, onToggle, onToggleChild }) {
   const color = categories[item.category]?.color || '#888';
   const isSideProject = item.category === 'project' && item.side;
   const visualLevel = isSideProject ? importance(item) : 5;
   const hasAssociatedItems = associatedItems && associatedItems.length > 0;
+  const skillState = skillStateFor(item.id);
   const cls = [
     'tl-block',
     `tl-${item.category}`,
@@ -92,19 +153,133 @@ function Block({ item, categories, style, tipSide, tipUp, associatedItems, isAct
     isSideProject && visualLevel <= 3 ? 'tl-dot-project' : '',
     isSideProject && visualLevel === 4 ? 'tl-named-project' : '',
     item.end == null ? 'tl-ongoing' : '',
-    tipSide === 'right' ? 'tl-r' : '',
-    childTipLeft ? 'tl-ctl' : '',
     isActive ? 'is-active' : '',
+    skillState === 'hit' ? 'tl-skill-hit' : '',
+    skillState === 'dim' ? 'tl-skill-dim' : '',
   ].filter(Boolean).join(' ');
 
   return (
     <div
       className={cls}
       style={{ ...style, '--c': color }}
+      data-tlid={item.id}
+      ref={(el) => setAnchor(item.id, el)}
       role="button"
       tabIndex={0}
       aria-expanded={isActive}
       aria-label={`${item.title}. ${yearLabel(item)}.${hasAssociatedItems ? ` Contains ${associatedItems.length} associated projects.` : ''}`}
+      onMouseEnter={() => onHover(item.id)}
+      onMouseLeave={() => onLeave(item.id)}
+      onFocus={() => onHover(item.id)}
+      onBlur={() => onLeave(item.id)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle(item.id);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onToggle(item.id);
+        }
+      }}
+    >
+      {visualLevel <= 3 ? (
+        <span className="tl-dot" aria-hidden="true" />
+      ) : visualLevel === 4 ? (
+        <div className="tl-title">{item.title}</div>
+      ) : (
+        <>
+          <div className="tl-emp-head">
+            <div className="tl-yrs">{yearLabel(item)}</div>
+            <div className="tl-title">{item.title}</div>
+            {item.role && <div className="tl-role">{item.role}</div>}
+          </div>
+          {hasAssociatedItems && !isActive && (
+            <div className="tl-emp-pills" aria-hidden="true">
+              {associatedItems.map((project) => (
+                <span
+                  key={project.id}
+                  className="tl-emp-pill"
+                  style={{ '--c': categories[project.category]?.color || color }}
+                >
+                  {project.title}
+                </span>
+              ))}
+            </div>
+          )}
+          {hasAssociatedItems && isActive && (
+            <div className="tl-emp-children">
+              {associatedItems.map((project) => {
+                const lvl = importance(project);
+                const childOpen = activeChildId === project.id;
+                const childSkillState = skillStateFor(project.id);
+                return (
+                  <div
+                    key={project.id}
+                    className={`tl-emp-child tl-emp-child-l${lvl >= 5 ? 5 : lvl === 4 ? 4 : 3}${childOpen ? ' is-open' : ''}${childSkillState === 'hit' ? ' tl-skill-hit' : ''}${childSkillState === 'dim' ? ' tl-skill-dim' : ''}`}
+                    style={{ '--c': categories[project.category]?.color || color }}
+                    data-tlid={project.id}
+                    ref={(el) => setAnchor(project.id, el)}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={childOpen}
+                    aria-label={`${project.title}. ${yearLabel(project)}.`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleChild(project.id);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onToggleChild(project.id);
+                      }
+                    }}
+                  >
+                    <div className="tl-emp-child-head">
+                      <span className="tl-emp-child-title">{project.title}</span>
+                      <small>{yearLabel(project)}</small>
+                    </div>
+                    {project.role && <div className="tl-emp-child-role">{project.role}</div>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function MobileBlock({ item, categories, style, isActive, childCount = 0, skillState = null, setAnchor, onToggle }) {
+  const color = categories[item.category]?.color || '#888';
+  const isSideProject = item.category === 'project' && item.side;
+  const visualLevel = isSideProject ? importance(item) : 5;
+  const cls = [
+    'tl-block',
+    `tl-${item.category}`,
+    item.side ? 'tl-side' : '',
+    isSideProject ? `tl-importance-${visualLevel}` : '',
+    isSideProject && visualLevel <= 3 ? 'tl-dot-project' : '',
+    isSideProject && visualLevel === 4 ? 'tl-named-project' : '',
+    item.end == null ? 'tl-ongoing' : '',
+    childCount > 0 ? 'tl-has-children' : '',
+    isActive ? 'is-active' : '',
+    skillState === 'hit' ? 'tl-skill-hit' : '',
+    skillState === 'dim' ? 'tl-skill-dim' : '',
+  ].filter(Boolean).join(' ');
+
+  return (
+    <div
+      className={cls}
+      style={{ ...style, '--c': color }}
+      data-tlid={item.id}
+      ref={(el) => setAnchor(item.id, el)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isActive}
+      aria-label={`${item.title}. ${yearLabel(item)}.${childCount > 0 ? ` Contains ${childCount} projects.` : ''}`}
       onClick={(e) => {
         e.stopPropagation();
         onToggle(item.id);
@@ -125,71 +300,76 @@ function Block({ item, categories, style, tipSide, tipUp, associatedItems, isAct
           <div className="tl-yrs">{yearLabel(item)}</div>
           <div className="tl-title">{item.title}</div>
           {item.role && <div className="tl-role">{item.role}</div>}
-          {hasAssociatedItems && !isActive && (
-            <div className="tl-emp-pills" aria-hidden="true">
-              {associatedItems.map((project) => (
-                <span
-                  key={project.id}
-                  className="tl-emp-pill"
-                  style={{ '--c': categories[project.category]?.color || color }}
-                >
-                  {project.title}
-                </span>
-              ))}
-            </div>
-          )}
-          {hasAssociatedItems && isActive && (
-            <div className="tl-emp-children">
-              {associatedItems.map((project) => {
-                const lvl = importance(project);
-                const childOpen = activeChildId === project.id;
-                return (
-                  <div
-                    key={project.id}
-                    className={`tl-emp-child tl-emp-child-l${lvl >= 5 ? 5 : lvl === 4 ? 4 : 3}${childOpen ? ' is-open' : ''}`}
-                    style={{ '--c': categories[project.category]?.color || color }}
-                    role="button"
-                    tabIndex={isActive ? 0 : -1}
-                    aria-expanded={childOpen}
-                    aria-label={`${project.title}. ${yearLabel(project)}.`}
-                    onClick={(e) => {
-                      if (!isActive) return;
-                      e.stopPropagation();
-                      onToggleChild(project.id);
-                    }}
-                    onKeyDown={(e) => {
-                      if (isActive && (e.key === 'Enter' || e.key === ' ')) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onToggleChild(project.id);
-                      }
-                    }}
-                  >
-                    <div className="tl-emp-child-head">
-                      <span className="tl-emp-child-title">{project.title}</span>
-                      <small>{yearLabel(project)}</small>
-                    </div>
-                    {project.role && <div className="tl-emp-child-role">{project.role}</div>}
-                    <Tip item={project} side={childTipLeft ? 'right' : 'left'} showTitle />
-                  </div>
-                );
-              })}
-            </div>
+          {childCount > 0 && (
+            <span className="tl-mob-count">{childCount} project{childCount > 1 ? 's' : ''} &rsaquo;</span>
           )}
         </>
       )}
-      <Tip item={item} side={tipSide} up={tipUp} showTitle={visualLevel <= 3} />
     </div>
   );
 }
 
-function Timeline({ data = timelineData }) {
-  const [isOpen, setIsOpen] = useState(false);
+function LaunchPreview({ items, categories }) {
+  const tops = items.filter((i) => !i.parentId);
+  if (!tops.length) return null;
+  const min = Math.min(...tops.map((i) => i.start));
+  const max = Math.max(...tops.map(endYear), NOW_YEAR);
+  const span = Math.max(max - min, 1);
+  const W = 88;
+  const H = 34;
+  const rowH = H / 3;
+  const rows = { employment: 0, project: 1, education: 2 };
+  return (
+    <svg className="tl-launch-mini" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+      {tops.map((i) => {
+        const row = rows[i.category];
+        if (row == null) return null;
+        const x = ((i.start - min) / span) * W;
+        const w = Math.max(((endYear(i) - i.start) / span) * W, 2);
+        return (
+          <rect
+            key={i.id}
+            x={x}
+            y={row * rowH + 2.5}
+            width={w}
+            height={rowH - 5}
+            rx={1.5}
+            fill={categories[i.category]?.color || '#888'}
+            opacity={i.side ? 0.45 : 0.8}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillChange }) {
   const [activeId, setActiveId] = useState(null);
   const [activeChildId, setActiveChildId] = useState(null);
+  const [hoverId, setHoverId] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobLane, setMobLane] = useState('employment');
   const scrollRef = useRef(null);
+  const launchRef = useRef(null);
+  const wasOpen = useRef(false);
+  const anchors = useRef(new Map());
 
-  const { categories = {}, items = [], title, subtitle } = data;
+  const { categories = {}, items = [], title, subtitle, skillGroups = [] } = data;
+  const itemsById = useMemo(() => Object.fromEntries(items.map((i) => [i.id, i])), [items]);
+
+  const allSkills = useMemo(() => skillGroups.flatMap((g) => g.skills || []), [skillGroups]);
+  const skillMatchIds = useMemo(() => {
+    if (!activeSkill) return null;
+    const ids = new Set();
+    items.forEach((it) => {
+      if ((it.skills || []).includes(activeSkill)) {
+        ids.add(it.id);
+        if (it.parentId) ids.add(it.parentId);
+      }
+    });
+    return ids;
+  }, [items, activeSkill]);
+  const skillStateFor = (id) => (skillMatchIds ? (skillMatchIds.has(id) ? 'hit' : 'dim') : null);
 
   const { lanes, childrenByParent, minYear, maxYear, orderByStart, yearStarts, totalUnits, itemLayouts, laneRows } = useMemo(() => {
     const grouped = { employment: [], education: [], project: [] };
@@ -343,7 +523,10 @@ function Timeline({ data = timelineData }) {
   useEffect(() => {
     if (!isOpen) return undefined;
     const onKey = (e) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        if (activeSkill) onSkillChange(null);
+        else close();
+      }
     };
     document.addEventListener('keydown', onKey);
     const prevOverflow = document.body.style.overflow;
@@ -352,30 +535,52 @@ function Timeline({ data = timelineData }) {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prevOverflow;
     };
+  }, [isOpen, activeSkill]);
+
+  // return focus to the launch card when the overlay closes
+  useEffect(() => {
+    if (wasOpen.current && !isOpen) launchRef.current?.focus();
+    wasOpen.current = isOpen;
   }, [isOpen]);
 
-  // open scrolled to the present (right) end of the track
+  // track viewport so the timeline can swap to its vertical mobile layout
   useEffect(() => {
-    if (!isOpen) return undefined;
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+    const mq = window.matchMedia(MOBILE_MQ);
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // desktop opens scrolled to the present (right) end of the horizontal track;
+  // the vertical mobile layout already puts 'now' at the top, so it stays at scrollTop 0
+  useEffect(() => {
+    if (!isOpen || isMobile) return undefined;
     const el = scrollRef.current;
     if (!el) return undefined;
     const id = requestAnimationFrame(() => {
       el.scrollLeft = el.scrollWidth;
     });
     return () => cancelAnimationFrame(id);
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
   useEffect(() => {
     setActiveChildId(null);
   }, [activeId]);
 
   const close = () => {
-    setIsOpen(false);
+    onClose();
     setActiveId(null);
     setActiveChildId(null);
+    setHoverId(null);
+    setMobLane('employment');
   };
   const toggle = (id) => setActiveId((cur) => (cur === id ? null : id));
   const toggleChild = (id) => setActiveChildId((cur) => (cur === id ? null : id));
+  const setAnchor = (id, el) => { if (el) anchors.current.set(id, el); else anchors.current.delete(id); };
+  const onHover = (id) => setHoverId(id);
+  const onLeave = (id) => setHoverId((cur) => (cur === id ? null : cur));
 
   const xPct = (year) => ((yearStarts[year] || 0) / totalUnits) * 100;
   const unitPct = (units) => (units / totalUnits) * 100;
@@ -390,14 +595,90 @@ function Timeline({ data = timelineData }) {
     return rows * laneBase(cat) + (rows - 1) * LANE_ROW_GAP;
   };
   const blockTop = (cat, row) => row * (laneBase(cat) + LANE_ROW_GAP);
+  const activeItem = activeId ? itemsById[activeId] : null;
+  const activeIsParent = Boolean(activeItem && childrenByParent[activeId]?.length);
+  const pinnedId = activeChildId || (activeId && !activeIsParent ? activeId : null);
+  let popId = pinnedId;
+  if (!popId && hoverId && !(hoverId === activeId && activeIsParent)) popId = hoverId;
+  const popItem = popId ? itemsById[popId] : null;
+  const popAnchor = popId ? anchors.current.get(popId) : null;
+
+  // ----- vertical mobile layout: time runs top (now) -> bottom (oldest) -----
+  // accordion of lanes: one expanded lane dominates, the others collapse to
+  // slim, textless time-rails that can be tapped to swap.
+  const canvasHeight = totalUnits * V_PX_PER_UNIT;
+  const vTop = (endUnits) => (totalUnits - endUnits) * V_PX_PER_UNIT;
+  const vHeight = (widthUnits) => widthUnits * V_PX_PER_UNIT;
+  const mobLayout = (item) => itemLayouts[item.id] || {
+    startUnits: yearStarts[item.start] || 0,
+    widthUnits: ITEM_SLOT_UNITS,
+    endUnits: (yearStarts[item.start] || 0) + ITEM_SLOT_UNITS,
+    row: 0,
+  };
+  // pack overlapping spanning blocks into side-by-side columns, per lane
+  // (dots and named chips float on the right edge instead of claiming a column)
+  const mobRows = {};
+  LANE_ORDER.forEach((cat) => {
+    const spans = (lanes[cat] || []).filter((it) => !(it.category === 'project' && it.side && importance(it) <= 4));
+    const rowEnds = [];
+    const rowOf = {};
+    spans
+      .map((it) => ({ it, l: mobLayout(it) }))
+      .sort((a, b) => a.l.startUnits - b.l.startUnits || a.l.endUnits - b.l.endUnits)
+      .forEach(({ it, l }) => {
+        let r = 0;
+        while (rowEnds[r] != null && l.startUnits < rowEnds[r] - 0.01) r += 1;
+        rowEnds[r] = l.endUnits;
+        rowOf[it.id] = r;
+      });
+    mobRows[cat] = { rowOf, count: Math.max(rowEnds.length, 1) };
+  });
+
+  const mobBlockStyle = (item) => {
+    const layout = mobLayout(item);
+    const isSideProject = item.category === 'project' && item.side;
+    const visualLevel = isSideProject ? importance(item) : 5;
+    const style = { top: `${vTop(layout.endUnits)}px`, '--i': orderByStart[item.id] };
+    if (visualLevel === 5) {
+      style.height = `${Math.max(vHeight(layout.widthUnits), 58)}px`;
+      const { rowOf, count } = mobRows[item.category] || { rowOf: {}, count: 1 };
+      const r = rowOf[item.id] || 0;
+      if (count > 1) {
+        style.left = `calc(${(r * 100) / count}% + ${r ? 4 : 0}px)`;
+        style.width = `calc(${100 / count}% - ${r ? 4 : 0}px)`;
+        style.right = 'auto';
+      }
+      style.zIndex = 2 + r;
+    }
+    return style;
+  };
+
+  // time-positioned child dots shown inside a collapsed parent's rail bar;
+  // same-year children fan downward so they don't pile on one spot
+  const kidMinis = (parent) => {
+    const seen = {};
+    return childrenOf(parent.id).map((k) => {
+      const n = (seen[k.start] = (seen[k.start] || 0) + 1) - 1;
+      return { kid: k, top: vTop(mobLayout(k).endUnits) + n * 9 };
+    });
+  };
+  const switchMobLane = (cat) => {
+    setMobLane(cat);
+    setActiveId(null);
+    setActiveChildId(null);
+  };
+  const mobPanelTop = activeItem ? vTop(mobLayout(activeItem).endUnits) : 0;
 
   return (
-    <section className="timeline-launch" data-tween-id="skills" aria-labelledby="timeline-heading">
+    <section className="timeline-launch" aria-labelledby="timeline-heading">
       <h3 id="timeline-heading">Timeline</h3>
-      <button type="button" className="button" onClick={() => setIsOpen(true)}>
+      <button type="button" className="tl-launch-card" onClick={onOpen} ref={launchRef}>
+        <LaunchPreview items={items} categories={categories} />
         <span className="tl-launch-text">
           <span className="tl-launch-title">Career Timeline</span>
+          <span className="tl-launch-sub"></span>
         </span>
+        <span className="tl-launch-arrow" aria-hidden="true">&rsaquo;</span>
       </button>
 
       {isOpen && createPortal((
@@ -419,6 +700,31 @@ function Timeline({ data = timelineData }) {
               </button>
             </header>
 
+            {allSkills.length > 0 && (
+              <div className="tl-skillbar" role="toolbar" aria-label="Highlight a skill">
+                {allSkills.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    className={`tl-skill-chip${activeSkill === s ? ' is-on' : ''}`}
+                    aria-pressed={activeSkill === s}
+                    onClick={() => onSkillChange(activeSkill === s ? null : s)}
+                  >
+                    {s}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className="tl-skill-clear"
+                  onClick={() => onSkillChange(null)}
+                  disabled={!activeSkill}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+
+            {!isMobile && (
             <div className="tl-body">
               <div className="tl-gutter" aria-hidden="true">
                 <div className="tl-gutter-axis" />
@@ -487,9 +793,6 @@ function Timeline({ data = timelineData }) {
                           const widthUnits = layout.widthUnits;
                           const left = unitPct(startUnits);
                           const width = unitPct(widthUnits);
-                          const tipSide = ongoing ? 'left' : left + width / 2 > 55 ? 'right' : 'left';
-                          const tipUp = cat === 'project';
-                          const childTipLeft = ongoing || left + width / 2 > 50;
                           const solid = ongoing
                             ? Math.max(0, Math.min(100, (((yearStarts[maxYear] || 0) - startUnits) / Math.max(totalUnits - startUnits, 1)) * 100))
                             : 100;
@@ -507,12 +810,13 @@ function Timeline({ data = timelineData }) {
                               item={item}
                               categories={categories}
                               style={style}
-                              tipSide={tipSide}
-                              tipUp={tipUp}
                               associatedItems={childrenByParent[item.id] || []}
                               isActive={activeId === item.id}
                               activeChildId={activeChildId}
-                              childTipLeft={childTipLeft}
+                              skillStateFor={skillStateFor}
+                              setAnchor={setAnchor}
+                              onHover={onHover}
+                              onLeave={onLeave}
                               onToggle={toggle}
                               onToggleChild={toggleChild}
                             />
@@ -524,9 +828,192 @@ function Timeline({ data = timelineData }) {
                 </div>
               </div>
             </div>
+            )}
+
+            {isMobile && (
+            <div className="tl-body tl-mob-body">
+              <div className="tl-mob-cols">
+                {LANE_ORDER.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    className={`tl-mob-col${mobLane === cat ? ' is-open' : ''}`}
+                    style={{ '--c': categories[cat]?.color }}
+                    aria-pressed={mobLane === cat}
+                    onClick={() => switchMobLane(cat)}
+                  >
+                    {categories[cat]?.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="tl-mob-scroll" ref={scrollRef}>
+                <div
+                  className="tl-mob-canvas"
+                  style={{ height: `${canvasHeight}px` }}
+                  onClick={() => { setActiveId(null); setActiveChildId(null); }}
+                >
+                  {years.map((y) => (
+                    <span key={y} className="tl-mob-tick" style={{ top: `${vTop(yearStarts[y] || 0)}px` }}>
+                      {y === maxYear ? 'now' : y}
+                    </span>
+                  ))}
+
+                  <div className="tl-mob-rails">
+                    {LANE_ORDER.map((cat) => {
+                      const open = mobLane === cat;
+                      return (
+                        <div
+                          key={cat}
+                          className={`tl-mob-rail${open ? ' is-open' : ''}`}
+                          style={{ '--c': categories[cat]?.color }}
+                          role={open ? undefined : 'button'}
+                          tabIndex={open ? undefined : 0}
+                          aria-label={open ? undefined : `Show ${categories[cat]?.label}`}
+                          onClick={open ? undefined : (e) => { e.stopPropagation(); switchMobLane(cat); }}
+                          onKeyDown={open ? undefined : (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              switchMobLane(cat);
+                            }
+                          }}
+                        >
+                          {open
+                            ? lanes[cat].map((item) => (
+                              <MobileBlock
+                                key={item.id}
+                                item={item}
+                                categories={categories}
+                                style={mobBlockStyle(item)}
+                                isActive={activeId === item.id}
+                                childCount={childrenOf(item.id).length}
+                                skillState={skillStateFor(item.id)}
+                                setAnchor={setAnchor}
+                                onToggle={toggle}
+                              />
+                            ))
+                            : lanes[cat].map((item) => {
+                              const layout = mobLayout(item);
+                              const isSideProject = item.category === 'project' && item.side;
+                              const isDot = isSideProject && importance(item) <= 4;
+                              const miniSkill = skillStateFor(item.id);
+                              const { rowOf, count } = mobRows[cat] || { rowOf: {}, count: 1 };
+                              const r = rowOf[item.id] || 0;
+                              const cls = [
+                                'tl-mob-mini',
+                                isDot ? 'tl-mob-mini-dot' : '',
+                                miniSkill === 'hit' ? 'tl-skill-hit' : '',
+                                miniSkill === 'dim' ? 'tl-skill-dim' : '',
+                              ].filter(Boolean).join(' ');
+                              const miniStyle = isDot
+                                ? { top: `${vTop(layout.endUnits)}px` }
+                                : {
+                                  top: `${vTop(layout.endUnits)}px`,
+                                  height: `${Math.max(vHeight(layout.widthUnits), 14)}px`,
+                                  ...(count > 1
+                                    ? { left: `${4 + r * 8}px`, right: 'auto', width: '7px' }
+                                    : {}),
+                                };
+                              return (
+                                <React.Fragment key={item.id}>
+                                  <span className={cls} style={miniStyle} aria-hidden="true" />
+                                  {kidMinis(item).map(({ kid, top }) => {
+                                    const kSkill = skillStateFor(kid.id);
+                                    const kCls = [
+                                      'tl-mob-mini-kid',
+                                      kSkill === 'hit' ? 'tl-skill-hit' : '',
+                                      kSkill === 'dim' ? 'tl-skill-dim' : '',
+                                    ].filter(Boolean).join(' ');
+                                    return (
+                                      <span
+                                        key={kid.id}
+                                        className={kCls}
+                                        style={{ top: `${top}px`, '--c': categories[kid.category]?.color }}
+                                        aria-hidden="true"
+                                      />
+                                    );
+                                  })}
+                                </React.Fragment>
+                              );
+                            })}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {activeItem && (
+                    <div
+                      className={`tl-mob-card tl-${activeItem.category}`}
+                      style={{ top: `${mobPanelTop}px`, '--c': categories[activeItem.category]?.color }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="tl-mob-card-close"
+                        onClick={() => { setActiveId(null); setActiveChildId(null); }}
+                        aria-label="Close details"
+                      >
+                        &times;
+                      </button>
+                      <div className="tl-mob-card-yrs">{yearLabel(activeItem)}</div>
+                      <div className="tl-mob-card-title">{activeItem.title}</div>
+                      {activeItem.role && <div className="tl-mob-card-role">{activeItem.role}</div>}
+                      {activeItem.location && <div className="tl-mob-card-loc">{activeItem.location}</div>}
+                      {activeItem.summary && <p className="tl-mob-card-summary">{activeItem.summary}</p>}
+                      <ProjectLinks links={activeItem.links} />
+
+                      {childrenOf(activeId).length > 0 && (
+                        <div className="tl-mob-card-children">
+                          <div className="tl-mob-card-children-head">Projects</div>
+                          {childrenOf(activeId).map((project) => {
+                            const childOpen = activeChildId === project.id;
+                            return (
+                              <div
+                                key={project.id}
+                                className={`tl-emp-child${childOpen ? ' is-open' : ''}`}
+                                style={{ '--c': categories[project.category]?.color }}
+                                role="button"
+                                tabIndex={0}
+                                aria-expanded={childOpen}
+                                aria-label={`${project.title}. ${yearLabel(project)}.`}
+                                onClick={(e) => { e.stopPropagation(); toggleChild(project.id); }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    toggleChild(project.id);
+                                  }
+                                }}
+                              >
+                                <div className="tl-emp-child-head">
+                                  <span className="tl-emp-child-title">{project.title}</span>
+                                  <small>{yearLabel(project)}</small>
+                                </div>
+                                {project.role && <div className="tl-mob-child-role">{project.role}</div>}
+                                {childOpen && (project.summary || (project.links && project.links.length > 0)) && (
+                                  <div className="tl-mob-child-detail">
+                                    {project.summary && <p>{project.summary}</p>}
+                                    <ProjectLinks links={project.links} />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            )}
           </div>
         </div>
       ), document.body)}
+
+      {isOpen && !isMobile && popItem && (
+        <DetailPopover item={popItem} anchorEl={popAnchor} accent={categories[popItem.category]?.color} />
+      )}
     </section>
   );
 }

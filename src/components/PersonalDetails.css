@@ -6,7 +6,7 @@
 .details {
   grid-area: details;
   justify-self: end;
-  align-self: center;
+  align-self: end;
   width: 100%;
   max-width: 320px;
   padding: 0;
@@ -15,9 +15,6 @@
   border-radius: 0;
   box-shadow: none;
   color: #30333c;
-  transition: background-color 0.45s ease, border-color 0.45s ease, border-radius 0.45s ease, box-shadow 0.45s ease, color 0.45s ease;
-  position: absolute;
-  bottom: 0;
 }
 
 .details #personalDetailsDiv {
@@ -39,7 +36,7 @@
   font-weight: 600;
   line-height: 0.94;
   opacity: 0;
-  animation: fadeInOpacity 1s forwards 3s;
+  animation: fadeInOpacity 0.8s forwards 1.3s;
 }
 
 .details #about {
@@ -50,7 +47,7 @@
   font-weight: 400;
   line-height: 1.4;
   opacity: 0;
-  animation: fadeInOpacity 1s forwards 2s;
+  animation: fadeInOpacity 0.8s forwards 0.7s;
 }
 
 .details #role {
@@ -62,14 +59,13 @@
   line-height: 1.4;
   text-transform: none;
   opacity: 0;
-  animation: fadeInOpacity 1s forwards 2.5s;
+  animation: fadeInOpacity 0.8s forwards 1s;
 }
 
 @media (max-width: 1024px) {
   .details {
     position: relative;
     z-index: 2;
-    top: auto;
     max-width: 100%;
   }
 

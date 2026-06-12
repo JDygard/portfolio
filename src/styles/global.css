@@ -1,32 +1,37 @@
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/minimalist/Montserrat-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Montserrat-Light';
-  src: url('../fonts/minimalist/Montserrat-Light.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Montserrat-SemiBold';
-  src: url('../fonts/minimalist/Montserrat-SemiBold.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Montserrat-Medium';
-  src: url('../fonts/minimalist/Montserrat-Medium.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Montserrat-Thin';
   src: url('../fonts/minimalist/Montserrat-Thin.otf') format('opentype');
-  font-weight: normal;
+  font-weight: 100;
   font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/minimalist/Montserrat-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/minimalist/Montserrat-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/minimalist/Montserrat-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/minimalist/Montserrat-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
 * {
@@ -56,9 +61,4 @@ button {
 img,
 svg {
   max-width: 100%;
-}
-
-[data-tween-id] {
-  transform-origin: top left;
-  will-change: transform;
 }

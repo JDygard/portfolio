@@ -12,8 +12,8 @@
   color: #30333c;
   font-family: Montserrat, Arial, sans-serif;
   grid-template-areas:
-    "details details details details pic pic pic pic portfolio portfolio portfolio portfolio"
-    "contacts contacts contacts contacts pic pic pic pic skills skills skills skills";
+    "details details details details pic pic pic pic skills skills skills skills"
+    "contacts contacts contacts contacts pic pic pic pic timeline timeline timeline timeline";
   position: relative;
   overflow: visible;
 }
@@ -46,7 +46,7 @@
       "pic"
       "details"
       "skills"
-      "portfolio"
+      "timeline"
       "contacts";
     padding: 32px 18px 32px;
     min-height: auto;

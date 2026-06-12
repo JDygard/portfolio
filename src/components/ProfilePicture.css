@@ -53,7 +53,7 @@
   stroke: #111318 !important;
   stroke-width: 1.2px !important;
   transition: fill 0.3s ease, stroke 0.3s ease, opacity 0.3s ease;
-  animation: draw 4s forwards;
+  animation: draw 2.2s forwards;
 }
 
 .imageContainer.drawn .face_svg__cls-1 {
@@ -66,11 +66,11 @@
 }
 
 .imageContainer path.face_svg__cls-1:nth-of-type(2) {
-  animation-delay: 0.7s;
+  animation-delay: 0.4s;
 }
 
 .imageContainer path.face_svg__cls-1:nth-of-type(3) {
-  animation-delay: 1.2s;
+  animation-delay: 0.7s;
 }
 
 @media (max-width: 1024px) {

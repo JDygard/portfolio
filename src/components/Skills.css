@@ -1,73 +1,63 @@
 .skills {
   grid-area: skills;
   justify-self: start;
-  align-self: start;
+  align-self: end;
   width: 100%;
-  max-width: 310px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-top: 1px solid #111318;
-  padding-top: 10px;
-  border-radius: 0;
-  box-shadow: none;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
   text-align: left;
-  transition: background-color 0.45s ease, border-color 0.45s ease, border-radius 0.45s ease, box-shadow 0.45s ease, color 0.45s ease;
 }
 
 .skills h3 {
-  margin: 0 0 14px;
+  margin: 2px 0 0;
   color: #ba6f6f;
-  font-size: 1.08rem;
-  font-weight: 600;
-  text-transform: none;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-.skills ul {
-  display: grid;
-  gap: 8px;
-  max-height: 165px;
+.skill-tier {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
   margin: 0;
   padding: 0;
-  overflow-y: auto;
   list-style: none;
-  scrollbar-width: none;
 }
 
-.skills ul::-webkit-scrollbar {
-  display: none;
+/* tier 1 = most relevant (bottom, largest); higher numbers shrink */
+.skill-tier-1 .skill-chip { font-size: 0.92rem; padding: 5px 14px; min-height: 32px; }
+.skill-tier-2 .skill-chip { font-size: 0.8rem; padding: 4px 11px; min-height: 27px; }
+.skill-tier-3 .skill-chip { font-size: 0.7rem; padding: 2px 9px; min-height: 22px; }
+
+/* same language as the site-wide .button */
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ececec;
+  color: #111318;
+  border: 0 solid transparent;
+  border-left: 1px solid #111318;
+  border-right: 1px solid #111318;
+  border-radius: 5px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.skills li {
-  min-width: 0;
+.skill-chip:hover {
+  background: #ffffff;
 }
 
-.skillLabel {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  color: #30333c;
-  font-size: 0.9rem;
+.skill-chip:active {
+  transform: translateY(1px);
 }
 
-.skillLevel {
-  color: #77716c;
-}
-
-.progressBar {
-  width: 100%;
-  height: 2px;
-  margin-top: 5px;
-  overflow: hidden;
-  background: #d8a5a5;
-  border-radius: 999px;
-}
-
-.progressFill {
-  height: 100%;
-  background: #111318;
-  border-radius: inherit;
-  transition: width 0.3s ease-in;
+.skill-chip:focus-visible {
+  outline: 2px solid #ba6f6f;
+  outline-offset: 2px;
 }
 
 @media (max-width: 1024px) {

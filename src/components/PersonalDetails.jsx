@@ -3,7 +3,7 @@ import './PersonalDetails.css';
 
 function PersonalDetails({ name, role, about, style }) {
   return (
-    <section className="details" data-tween-id="details" aria-labelledby="name">
+    <section className="details" aria-labelledby="name">
       <div id="personalDetailsDiv" style={style}>
         <p id="about">{about}</p>
         <p id="role">{role}</p>

@@ -16,7 +16,7 @@ const getContactHref = (link) => {
 
 function ContactLinks({ links }) {
   return (
-    <section className="contacts" data-tween-id="contact" aria-labelledby="contact-heading">
+    <section className="contacts" aria-labelledby="contact-heading">
       <h3 id="contact-heading">Contact</h3>
       <ul>
         {links.map((link) => (
