@@ -12,7 +12,7 @@ function ProfilePicture({ SvgComponent, style }) {
   return (
     <div className={drawn ? 'imageContainer drawn' : 'imageContainer'}>
       <div style={style} id="profilePicture">
-        <SvgComponent alt="Developer's Profile" />
+        <SvgComponent role="img" aria-label="Line-drawn portrait of Joel Dygard" />
       </div>
     </div>
   );

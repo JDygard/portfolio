@@ -17,6 +17,23 @@
   font-weight: 700;
 }
 
+/* clipped tier stack; the cut-off row below the fold is the only affordance */
+.skills-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.skills-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .skill-tier {
   display: flex;
   flex-wrap: wrap;
@@ -64,7 +81,6 @@
   /* mobile reads top-down: rule, "Skills" heading, then tiers largest-first */
   .skills {
     max-width: 100%;
-    flex-direction: column-reverse;
     align-items: center;
     text-align: center;
     border-top: 1px solid #111318;
@@ -72,7 +88,16 @@
   }
 
   .skills h3 {
+    order: -1;
     margin: 0;
+  }
+
+  /* nothing to curtail on mobile — the page already scrolls */
+  .skills-scroll {
+    max-height: none;
+    overflow: visible;
+    width: 100%;
+    align-items: center;
   }
 
   .skill-tier {

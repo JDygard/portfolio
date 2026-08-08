@@ -1,0 +1,10 @@
+# Normalize line endings: text files stored as LF in the repo regardless of OS.
+# Stops the whole-file CRLF/LF churn showing up in diffs.
+* text=auto
+
+# Binary assets — never touch line endings
+*.png binary
+*.ico binary
+*.otf binary
+*.woff binary
+*.woff2 binary

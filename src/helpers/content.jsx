@@ -1,7 +1,7 @@
 import SvgFace from './face';
 
 const contactLinks = [
-  { type: "Email", value: "joel.dygard@combine.se" },
+  { type: "Email", value: "jdygard@gmail.com" },
   { type: "Phone", value: "+46-709933660" },
   { type: "LinkedIn", value: "https://www.linkedin.com/in/joel-dygard/" },
   { type: "GitHub", value: "https://github.com/JDygard/" },

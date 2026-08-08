@@ -41,6 +41,14 @@ jobs:
         run: npm ci
 
       - name: Build (client + SSR + prerender)
+        # Analytics is baked in at build time. If ANALYTICS_PROVIDER is unset the
+        # shim compiles to a no-op and no third-party script is loaded. These are
+        # repo *variables*, not secrets — the website ID is public in the tag.
+        env:
+          VITE_ANALYTICS_PROVIDER: ${{ vars.ANALYTICS_PROVIDER }}
+          VITE_UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
+          VITE_UMAMI_SRC: ${{ vars.UMAMI_SRC }}
+          VITE_PLAUSIBLE_DOMAIN: ${{ vars.PLAUSIBLE_DOMAIN }}
         run: npm run build
 
       - name: Verify prerendered CSS

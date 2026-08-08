@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { track } from '../analytics';
 import './Timeline.css';
 
 const NOW_YEAR = new Date().getFullYear();
@@ -55,7 +56,17 @@ function ProjectLinks({ links = [] }) {
   return (
     <div className="tl-tip-links">
       {links.map((l) => (
-        <a key={l.url} href={l.url} target="_blank" rel="noreferrer noopener" onClick={(e) => e.stopPropagation()}>
+        <a
+          key={l.url}
+          className={l.primary ? 'is-primary' : undefined}
+          href={l.url}
+          target="_blank"
+          rel="noreferrer noopener"
+          onClick={(e) => {
+            e.stopPropagation();
+            track('project-link', { label: l.label, url: l.url });
+          }}
+        >
           {l.label}
         </a>
       ))}
@@ -331,7 +342,13 @@ function LaunchPreview({ items, categories }) {
   const rowH = H / 3;
   const rows = { employment: 0, project: 1, education: 2 };
   return (
-    <svg className="tl-launch-mini" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+    <svg
+      className="tl-launch-mini"
+      viewBox={`0 0 ${W} ${H}`}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
       {tops.map((i) => {
         const row = rows[i.category];
         if (row == null) return null;
@@ -602,7 +619,12 @@ function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillCh
     setHoverId(null);
     setMobLane('employment');
   };
-  const toggle = (id) => setActiveId((cur) => (cur === id ? null : id));
+  // Track only expansions, not collapses. Kept outside the state updater so
+  // the updater stays pure (StrictMode double-invokes it in dev).
+  const toggle = (id) => {
+    if (activeId !== id) track('timeline-item', { item: id });
+    setActiveId((cur) => (cur === id ? null : id));
+  };
   const toggleChild = (id) => setActiveChildId((cur) => (cur === id ? null : id));
   const setAnchor = (id, el) => { if (el) anchors.current.set(id, el); else anchors.current.delete(id); };
   const onHover = (id) => setHoverId(id);
@@ -720,12 +742,14 @@ function Timeline({ data, isOpen, onOpen, onClose, activeSkill = null, onSkillCh
   return (
     <section className="timeline-launch" aria-labelledby="timeline-heading">
       <h3 id="timeline-heading">Timeline</h3>
-      <button type="button" className="tl-launch-card" onClick={onOpen} ref={launchRef}>
+      <button
+        type="button"
+        className="tl-launch-card"
+        onClick={onOpen}
+        ref={launchRef}
+        aria-label="Open career timeline"
+      >
         <LaunchPreview items={items} categories={categories} />
-        <span className="tl-launch-text">
-          <span className="tl-launch-title">Career Timeline</span>
-          <span className="tl-launch-sub"></span>
-        </span>
         <span className="tl-launch-arrow" aria-hidden="true">&rsaquo;</span>
       </button>
 

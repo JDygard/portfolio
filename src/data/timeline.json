@@ -354,6 +354,7 @@
       "skills": ["React", "Frontend Architecture", "Data Visualization"],
       "summary": "Data visualization and analytics project focused on NFL draft value, historical outcomes and narrative-driven presentation of complex statistical data.",
       "links": [
+        { "label": "Live site", "url": "https://draft.jdygard.com", "primary": true },
         { "label": "Code", "url": "https://github.com/JDygard/draftAnalysis" }
       ]
     },

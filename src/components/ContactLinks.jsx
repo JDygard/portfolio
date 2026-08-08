@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import { track } from '../analytics';
 import './ContactLinks.css';
 
 const getContactHref = (link) => {
@@ -21,7 +22,12 @@ function ContactLinks({ links }) {
       <ul>
         {links.map((link) => (
           <li key={link.type}>
-            <Button href={getContactHref(link)} target={link.type === "Email" || link.type === "Phone" ? undefined : "_blank"} rel="noopener noreferrer">
+            <Button
+              href={getContactHref(link)}
+              target={link.type === "Email" || link.type === "Phone" ? undefined : "_blank"}
+              rel="noopener noreferrer"
+              onClick={() => track('contact-click', { channel: link.type })}
+            >
               {link.type === "Email" || link.type === "Phone" ? link.value : link.type}
             </Button>
           </li>

@@ -8,6 +8,7 @@ import Timeline from './components/Timeline';
 // Content
 import { content } from './helpers/content';
 import timelineData from './data/timeline.json';
+import { track } from './analytics';
 import './PortfolioContent.css';
 
 function PortfolioContent() {
@@ -15,6 +16,7 @@ function PortfolioContent() {
   const [activeSkill, setActiveSkill] = useState(null);
 
   const openTimelineWithSkill = (skill) => {
+    track('skill-chip', { skill });
     setActiveSkill(skill);
     setTimelineOpen(true);
   };
@@ -31,13 +33,19 @@ function PortfolioContent() {
       <Timeline
         data={timelineData}
         isOpen={timelineOpen}
-        onOpen={() => setTimelineOpen(true)}
+        onOpen={() => {
+          track('timeline-open', { source: 'direct' });
+          setTimelineOpen(true);
+        }}
         onClose={() => {
           setTimelineOpen(false);
           setActiveSkill(null);
         }}
         activeSkill={activeSkill}
-        onSkillChange={setActiveSkill}
+        onSkillChange={(skill) => {
+          if (skill) track('timeline-filter', { skill });
+          setActiveSkill(skill);
+        }}
       />
       <ContactLinks links={content.contactLinks} />
     </main>
